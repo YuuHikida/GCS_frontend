@@ -17,6 +17,7 @@ function App() {
     <div>
       <h1>Hello Wolrd from Frontend</h1>
       <p>{message}</p>
+      <p>test:{process.env.REACT_APP_API_BASE_URL}</p>
     </div>
   );
 }
