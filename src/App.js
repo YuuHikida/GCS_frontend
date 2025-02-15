@@ -1,23 +1,27 @@
 import './App.css';
-import React,{ useEffect, useState } from 'react';
-
-
+import React from 'react';
+import { useAuth } from './config/firebase';
 
 function App() {
-  const[message,setMessage] = useState();
+  const { user, loading, login, logout } = useAuth();
 
-  useEffect(()=>{
-    fetch(`${process.env.REACT_APP_API_BASE_URL}/api/hello`)
-    .then((res)=>res.text())
-    .then(setMessage);
-  },[]);
-
+  if (loading) {
+    return <div>読み込み中...</div>;
+  }
 
   return (
-    <div>
-      <h1>Hello Wolrd from Frontend</h1>
-      <p>{message}</p>
-      <p>test:{process.env.REACT_APP_API_BASE_URL}</p>
+    <div className="App">
+      {user ? (
+        <div>
+          <p>ようこそ、{user.name}さん</p>
+          <button onClick={logout}>ログアウト</button>
+        </div>
+      ) : (
+        <div>
+          <p>ログインしてください</p>
+          <button onClick={login}>Googleでログイン</button>
+        </div>
+      )}
     </div>
   );
 }
