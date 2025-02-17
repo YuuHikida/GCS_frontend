@@ -3,6 +3,20 @@ import { useRouter } from 'next/router';
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 
+/*概要説明等
+目的：
+    新規ユーザーが追加情報を入力するための登録フォームを提供
+主な機能：
+    ユーザー情報入力フォームの表示
+    Google認証で取得した基本情報の表示
+    GitHubユーザー名などの追加情報の収集
+    登録情報のバックエンドへの送信
+重要なポイント：
+    Googleログインで取得した情報を初期値として表示
+    必要な追加情報を収集
+    登録完了後にダッシュボードへ遷移
+*/
+
 const Register = () => {
   // ルーターとユーザー認証情報を初期化
   const router = useRouter();
