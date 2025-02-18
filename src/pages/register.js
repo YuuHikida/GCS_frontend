@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../config/firebase';
 import axios from 'axios';
 
 /*概要説明等
@@ -18,8 +18,7 @@ import axios from 'axios';
 */
 
 const Register = () => {
-  // ルーターとユーザー認証情報を初期化
-  const router = useRouter();
+  const navigate = useNavigate();
   const { user } = useAuth();
 
   // フォームデータの状態を管理
@@ -47,7 +46,7 @@ const Register = () => {
     try {
       // ユーザー登録APIを呼び出し
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
+        `${process.env.REACT_APP_API_URL}/api/auth/register`,
         {
           ...formData,
           googleId: user?.googleId, // GoogleIDを追加
@@ -56,7 +55,7 @@ const Register = () => {
 
       // 登録成功時はダッシュボードへ遷移
       if (response.data.success) {
-        router.push('/dashboard');
+        navigate('/dashboard');
       }
     } catch (error) {
       console.error('Registration failed:', error);

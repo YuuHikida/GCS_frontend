@@ -22,6 +22,41 @@ export const useAuth = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const login = async () => {
+    try {
+      const auth = getAuth();
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      
+      const token = await result.user.getIdToken();
+      
+      const response = await fetch('http://localhost:8080/api/auth/verify-token', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      const userData = await response.json();
+      
+      setUser(userData.user);
+      
+      return {
+        success: true,
+        isNewUser: userData.isNewUser,
+        user: userData.user
+      };
+
+    } catch (error) {
+      console.error('Login error:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
@@ -48,16 +83,22 @@ export const useAuth = () => {
     return () => unsubscribe();
   }, []);
 
-  const login = async () => {
-    const provider = new GoogleAuthProvider();
+  const logout = async () => {
+    const auth = getAuth();
     try {
-      await signInWithPopup(auth, provider);
+      await auth.signOut();
+      setUser(null);
+      return { success: true };
     } catch (error) {
-      console.error('ログインエラー:', error);
+      console.error('Logout error:', error);
+      return { success: false, error: error.message };
     }
   };
 
-  const logout = () => signOut(auth);
-
-  return { user, loading, login, logout };
+  return {
+    user,
+    loading,
+    login,
+    logout
+  };
 };
