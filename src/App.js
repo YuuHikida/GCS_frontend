@@ -10,7 +10,7 @@ function App() {
   const handleLogin = async () => {
     try {
       const result = await login();
-      console.log("ログイン結果:", result);
+      console.log("★ログイン結果:", result);
 
       if (result.success) {
         if (result.isNewUser) {

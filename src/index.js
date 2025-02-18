@@ -12,8 +12,11 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
+        //ホーム画面
         <Route path="/" element={<App />} />
+        //登録画面  
         <Route path="/register" element={<Register />} />
+        //ログイン後遷移画面
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
