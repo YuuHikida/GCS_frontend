@@ -1,50 +1,46 @@
 import './App.css';
 import React from 'react';
-import { useAuth } from './config/firebase';
-import { useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { PrivateRoute } from './components/PrivateRoute';
+import Login from './pages/login';
+import Register from './pages/register';
+import Dashboard from './pages/dashboard';
 
+/**
+ * アプリケーションのメインコンポーネント
+ * ルーティング設定を管理し、各ページへの遷移を制御
+ * 
+ * ルーティング構成:
+ * / -> ログインページにリダイレクト
+ * /login -> 未認証ユーザー用のログインページ
+ * /register -> 認証済みユーザーの登録ページ（PrivateRoute保護）
+ * /dashboard -> 認証済みユーザーのダッシュボード（PrivateRoute保護）
+ */
 function App() {
-  const { user, loading, login, logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogin = async () => {
-    try {
-      const result = await login();
-      console.log("★ログイン結果:", result);
-
-      if (result.success) {
-        if (result.isNewUser) {
-          console.log("新規ユーザーです。登録画面へ遷移します。");
-          navigate('/register');
-        } else {
-          console.log("既存ユーザーです。ダッシュボードへ遷移します。");
-          navigate('/dashboard');
-        }
-      }
-    } catch (error) {
-      console.error("ログインエラー:", error);
-    }
-  };
-
-  if (loading) {
-    return <div>読み込み中...</div>;
-  }
-
-  return (
-    <div className="App">
-      {user ? (
-        <div>
-          <p>ようこそ、{user.name}さん</p>
-          <button onClick={logout}>ログアウト</button>
-        </div>
-      ) : (
-        <div>
-          <p>ログインしてください</p>
-          <button onClick={handleLogin}>Googleでログイン</button>
-        </div>
-      )}
-    </div>
-  );
+    return (
+        <Routes>
+            {/* デフォルトルートをログインページにリダイレクト */}
+            <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="/login" element={<Login />} />
+            {/* 認証が必要なルート */}
+            <Route 
+                path="/register" 
+                element={
+                    <PrivateRoute>
+                        <Register />
+                    </PrivateRoute>
+                } 
+            />
+            <Route 
+                path="/dashboard" 
+                element={
+                    <PrivateRoute>
+                        <Dashboard />
+                    </PrivateRoute>
+                } 
+            />
+        </Routes>
+    );
 }
 
 export default App;

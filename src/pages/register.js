@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../config/firebase';
-import axios from 'axios';
 
 /*概要説明等
 目的：
@@ -17,94 +16,80 @@ import axios from 'axios';
     登録完了後にダッシュボードへ遷移
 */
 
-const Register = () => {
-  const navigate = useNavigate();
-  const { user } = useAuth();
+function Register() {
+    const { user } = useAuth();
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        notificationEmail: user?.email || '',
+        gitName: '',
+        time: ''
+    });
 
-  // フォームデータの状態を管理
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    githubUsername: '',
-  });
+    //デバック
+    React.useEffect(() => {
+        console.log('Current user:', user);
+    }, [user]);
 
-  // ユーザー情報が変更されたときに、フォームの初期値を設定
-  useEffect(() => {
-    if (user) {
-      setFormData(prevData => ({
-        ...prevData,
-        name: user.name || '',
-        email: user.email || '',
-      }));
-    }
-  }, [user]);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:8080/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    googleId: user.uid,
+                    notificationEmail: formData.notificationEmail,
+                    gitName: formData.gitName,
+                    time: formData.time
+                }),
+            });
 
-  // フォーム送信時の処理
-  const handleSubmit = async (e) => {
-    // フォームのデフォルト送信を防止
-    e.preventDefault();
-    try {
-      // ユーザー登録APIを呼び出し
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/auth/register`,
-        {
-          ...formData,
-          googleId: user?.googleId, // GoogleIDを追加
+            const data = await response.json();
+            if (data.success) {
+                navigate('/dashboard');
+            }
+        } catch (error) {
+            console.error("登録エラー:", error);
         }
-      );
+    };
 
-      // 登録成功時はダッシュボードへ遷移
-      if (response.data.success) {
-        navigate('/dashboard');
-      }
-    } catch (error) {
-      console.error('Registration failed:', error);
-    }
-  };
-
-  // 登録フォームのUIをレンダリング
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h1 className="text-2xl font-bold mb-6 text-center">ユーザー登録</h1>
-        <form onSubmit={handleSubmit}>
-          {/* 名前入力フィールド */}
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              名前
-            </label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-3 py-2 border rounded-lg"
-              required
-            />
-          </div>
-          {/* GitHubユーザー名入力フィールド */}
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              GitHubユーザー名
-            </label>
-            <input
-              type="text"
-              value={formData.githubUsername}
-              onChange={(e) => setFormData({ ...formData, githubUsername: e.target.value })}
-              className="w-full px-3 py-2 border rounded-lg"
-              required
-            />
-          </div>
-          {/* 登録ボタン */}
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200"
-          >
-            登録
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-};
+    return (
+        <div className="register-container">
+            <h1>ユーザー登録</h1>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label>通知用メールアドレス:</label>
+                    <input
+                        type="email"
+                        value={formData.notificationEmail}
+                        onChange={(e) => setFormData({...formData, notificationEmail: e.target.value})}
+                        required
+                    />
+                </div>
+                <div>
+                    <label>Gitユーザー名:</label>
+                    <input
+                        type="text"
+                        value={formData.gitName}
+                        onChange={(e) => setFormData({...formData, gitName: e.target.value})}
+                        required
+                    />
+                </div>
+                <div>
+                    <label>通知時間:</label>
+                    <input
+                        type="time"
+                        value={formData.time}
+                        onChange={(e) => setFormData({...formData, time: e.target.value})}
+                        required
+                    />
+                </div>
+                <button type="submit">登録</button>
+            </form>
+        </div>
+    );
+}
 
 export default Register;
