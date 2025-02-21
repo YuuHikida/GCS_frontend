@@ -15,6 +15,7 @@ const AuthContext = createContext();
 
 /**
  * 認証コンテキストを使用するためのカスタムフック
+ * useAuthを呼ぶことで認証状態を取得できる=(AuthContextの値を取得できる)
  */
 export function useAuth() {
     return useContext(AuthContext);
@@ -30,7 +31,9 @@ export function useAuth() {
  * - ローディング状態の管理
  */
 export function AuthProvider({ children }) {
+    //現在ログインしているユーザー情報を管理
     const [user, setUser] = useState(null);
+    //ローディング状態を管理    
     const [loading, setLoading] = useState(true);
 
     // Googleログイン処理
