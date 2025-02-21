@@ -85,6 +85,7 @@ export const useAuth = () => {
   };
 
   // Firebase認証状態の監視を設定
+  
   useEffect(() => {
     // ユーザーの認証状態が変更されたときに呼び出される関数
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
