@@ -10,9 +10,8 @@ function Login() {
         try {
             const result = await loginWithGoogle();
             console.log("★ログイン結果:", result);
-            // バックエンドのAPIを呼び出してユーザー情報を検証
             const idToken = await result.getIdToken();
-            const response = await fetch('http://localhost:8080/api/auth/verify-token', {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/auth/verify-token`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${idToken}`,
