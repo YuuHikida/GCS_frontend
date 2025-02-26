@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { logDebug } from '../util/customDebugLog';
 
 function Login() {
     const { loginWithGoogle } = useAuth();
@@ -18,6 +19,7 @@ function Login() {
                 },
             });
 
+            logDebug("★testtest");
             const data = await response.json();
             if (data.success) {
                 if (data.isNewUser) {

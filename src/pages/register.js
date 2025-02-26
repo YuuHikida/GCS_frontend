@@ -25,6 +25,13 @@ function Register() {
         time: ''
     });
 
+    //エラー状態の管理
+    const [errors, setErrors] = useState({
+        notificationEmail: '',
+        gitName: '',
+        time: ''
+    });
+
     //デバック
     React.useEffect(() => {
         console.log('Current user:', user);
@@ -47,8 +54,12 @@ function Register() {
             });
 
             const data = await response.json();
+            
             if (data.success) {
                 navigate('/dashboard');
+            } else {
+                // エラーメッセージを設定
+                setErrors(data.errors || {});
             }
         } catch (error) {
             console.error("登録エラー:", error);
@@ -67,6 +78,9 @@ function Register() {
                         onChange={(e) => setFormData({...formData, notificationEmail: e.target.value})}
                         required
                     />
+                    {errors.notificationEmail && (
+                        <div className="error-message">{errors.notificationEmail}</div>
+                    )}
                 </div>
                 <div>
                     <label>Gitユーザー名:</label>
@@ -76,6 +90,9 @@ function Register() {
                         onChange={(e) => setFormData({...formData, gitName: e.target.value})}
                         required
                     />
+                    {errors.gitName && (
+                        <div className="error-message">{errors.gitName}</div>
+                    )}
                 </div>
                 <div>
                     <label>通知時間:</label>
