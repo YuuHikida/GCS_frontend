@@ -66,6 +66,18 @@ function Register() {
         }
     };
 
+    const handleHourChange = (e) => {
+        const newHour = e.target.value;
+        const [_, minutes] = formData.time.split(':');
+        setFormData({...formData, time: `${newHour}:${minutes}`});
+    };
+
+    const handleMinuteChange = (e) => {
+        const newMinute = e.target.value;
+        const [hours, _] = formData.time.split(':');
+        setFormData({...formData, time: `${hours}:${newMinute}`});
+    };
+
     return (
         <div className="register-container">
             <h1>ユーザー登録</h1>
@@ -96,12 +108,34 @@ function Register() {
                 </div>
                 <div>
                     <label>通知時間:</label>
-                    <input
-                        type="time"
-                        value={formData.time}
-                        onChange={(e) => setFormData({...formData, time: e.target.value})}
-                        required
-                    />
+                    <div>
+                        <select
+                            value={formData.time.split(':')[0]}
+                            onChange={handleHourChange}
+                            required
+                        >
+                            {Array.from({ length: 24 }, (_, hour) => (
+                                <option key={hour} value={String(hour).padStart(2, '0')}>
+                                    {String(hour).padStart(2, '0')}
+                                </option>
+                            ))}
+                        </select>
+                        :
+                        <select
+                            value={formData.time.split(':')[1]}
+                            onChange={handleMinuteChange}
+                            required
+                        >
+                            {['00', '15', '30', '45'].map(minute => (
+                                <option key={minute} value={minute}>
+                                    {minute}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    {errors.time && (
+                        <div className="error-message">{errors.time}</div>
+                    )}
                 </div>
                 <button type="submit">登録</button>
             </form>
