@@ -1,10 +1,12 @@
 import './App.css';
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { PrivateRoute } from './components/PrivateRoute';
 import Login from './pages/login';
 import Register from './pages/register';
 import Dashboard from './pages/dashboard';
+import Header from './components/Header';
+import Welcome from './pages/Welcome';
 
 /**
  * アプリケーションのメインコンポーネント
@@ -18,28 +20,14 @@ import Dashboard from './pages/dashboard';
  */
 function App() {
     return (
-        <Routes>
-            {/* デフォルトルートをログインページにリダイレクト */}
-            <Route path="/" element={<Navigate to="/login" />} />
-            <Route path="/login" element={<Login />} />
-            {/* 認証が必要なルート */}
-            <Route 
-                path="/register" 
-                element={
-                    <PrivateRoute>
-                        <Register />
-                    </PrivateRoute>
-                } 
-            />
-            <Route 
-                path="/dashboard" 
-                element={
-                    <PrivateRoute>
-                        <Dashboard />
-                    </PrivateRoute>
-                } 
-            />
-        </Routes>
+        <>
+            <Routes>
+                <Route path="/" element={<Welcome />} />
+                <Route path="/register" element={<><Header disableAuthButtons={true} /><Register /></>} />
+                <Route path="/dashboard" element={<><Header /><Dashboard /></>} />
+                <Route path="/login" element={<><Header /><Login /></>} />
+            </Routes>
+        </>
     );
 }
 

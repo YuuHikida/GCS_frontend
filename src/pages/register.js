@@ -22,7 +22,7 @@ function Register() {
     const [formData, setFormData] = useState({
         notificationEmail: user?.email || '',
         gitName: '',
-        time: ''
+        time: '21:30'
     });
 
     //エラー状態の管理
