@@ -1,0 +1,50 @@
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #6557c3; /* ヘッダーの背景色 */
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    z-index: 1000;
+    box-shadow: 0 -10px 0 #d97a3f inset; /* オレンジ色のラインを内側に配置 */
+}
+
+.nav-item {
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    position: relative; /* 相対位置を設定 */
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background-color: #d97a3f; /* オレンジ色 */
+    border-radius: 10px;
+    z-index: 1; /* オレンジ色を前面に */
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav-item {
+        padding: 15px 0;
+        width: 100%;
+        text-align: center;
+    }
+}
+
+.content {
+    margin-top: 70px; /* ヘッダーの高さ分の余白を追加 */
+}
+
+@media (max-width: 768px) {
+    .content {
+        margin-top: 100px; /* 小さい画面用の余白を調整 */
+    }
+}

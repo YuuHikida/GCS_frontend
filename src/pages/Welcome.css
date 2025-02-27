@@ -1,0 +1,42 @@
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #6557c3, #d97a3f); /* グラデーションの設定: 左上から右下に色が変わる */
+    color: white;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.hero-content {
+    max-width: 600px;
+}
+
+.hero-button {
+    background-color: #fff;
+    color: #6557c3;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.hero-button:hover {
+    background-color: #6557c3;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        height: auto;
+        padding: 40px 20px;
+    }
+
+    .hero-content {
+        width: 100%;
+    }
+} 

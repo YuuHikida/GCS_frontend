@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import './Welcome.css'; // CSSファイルをインポート
 
 function Welcome() {
     const { loginWithGoogle } = useAuth();
@@ -31,10 +32,12 @@ function Welcome() {
     };
 
     return (
-        <div className="welcome-container">
-            <h1>ようこそ！</h1>
-            <p>このウェブサイトは、ユーザーが追加情報を入力するための登録フォームを提供します。</p>
-            <button onClick={handleLogin}>Googleでログイン</button>
+        <div className="hero-section">
+            <div className="hero-content">
+                <h1>ようこそ！</h1>
+                <p>このウェブサイトは、ユーザーが追加情報を入力するための登録フォームを提供します。</p>
+                <button onClick={handleLogin} className="hero-button">Googleでログイン</button>
+            </div>
         </div>
     );
 }

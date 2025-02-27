@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import './Header.css';
 
-function Header({ disableAuthButtons }) {
+function Header({ children }) {
     const { user, loginWithGoogle, logout } = useAuth();
     const navigate = useNavigate();
+    const [activeIndex, setActiveIndex] = useState(null);
 
     const handleLogin = async () => {
-        if (disableAuthButtons) return;
         try {
             const result = await loginWithGoogle();
             const idToken = await result.getIdToken();
@@ -32,7 +33,6 @@ function Header({ disableAuthButtons }) {
     };
 
     const handleLogout = async () => {
-        if (disableAuthButtons) return;
         try {
             await logout();
             navigate('/login');
@@ -41,17 +41,28 @@ function Header({ disableAuthButtons }) {
         }
     };
 
+    const handleClick = (index) => {
+        setActiveIndex(index);
+    };
+
     return (
-        <header className="header">
-            <h1>アプリ名</h1>
-            {!disableAuthButtons && (
-                user ? (
-                    <button onClick={handleLogout}>ログアウト</button>
-                ) : (
-                    <button onClick={handleLogin}>Googleでログイン</button>
-                )
-            )}
-        </header>
+        <>
+            <div className="header">
+                {['ホーム', 'プロフィール', 'チャンネル', '設定', '個人情報', 'ヘルプ', 'サインアウト'].map((item, index) => (
+                    <a
+                        key={index}
+                        href="#"
+                        className={`nav-item ${activeIndex === index ? 'active' : ''}`}
+                        onClick={() => handleClick(index)}
+                    >
+                        {item}
+                    </a>
+                ))}
+            </div>
+            <div style={{ marginTop: '70px' }}>
+                {children}
+            </div>
+        </>
     );
 }
 

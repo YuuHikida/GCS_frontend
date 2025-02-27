@@ -18,16 +18,17 @@ import Welcome from './pages/Welcome';
  * /register -> 認証済みユーザーの登録ページ（PrivateRoute保護）
  * /dashboard -> 認証済みユーザーのダッシュボード（PrivateRoute保護）
  */
+
+
+
 function App() {
     return (
-        <>
-            <Routes>
-                <Route path="/" element={<Welcome />} />
-                <Route path="/register" element={<><Header disableAuthButtons={true} /><Register /></>} />
-                <Route path="/dashboard" element={<><Header /><Dashboard /></>} />
-                <Route path="/login" element={<><Header /><Login /></>} />
-            </Routes>
-        </>
+        <Routes>
+            <Route path="/" element={<Welcome />} />
+            <Route path="/register" element={<Header disableAuthButtons={true}><Register /></Header>} />
+            <Route path="/dashboard" element={<Header><Dashboard /></Header>} />
+            <Route path="/login" element={<Header><Login /></Header>} />
+        </Routes>
     );
 }
 
