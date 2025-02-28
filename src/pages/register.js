@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { Button, Fieldset, Input, Stack } from "@chakra-ui/react";
+import { Field } from "../components/ui/field";
+import {
+  NativeSelectField,
+  NativeSelectRoot,
+} from "../components/ui/native-select";
 
 /*概要説明等
 目的：
@@ -79,67 +85,69 @@ function Register() {
     };
 
     return (
-        <div className="register-container">
-            <h1>ユーザー登録</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>通知用メールアドレス:</label>
-                    <input
+        <Fieldset.Root size="lg" maxW="md">
+            <Stack>
+                <Fieldset.Legend>ユーザー登録</Fieldset.Legend>
+                <Fieldset.HelperText>
+                    以下に必要な情報を入力してください。
+                </Fieldset.HelperText>
+            </Stack>
+
+            <Fieldset.Content>
+                <Field label="通知用メールアドレス">
+                    <Input
                         type="email"
                         value={formData.notificationEmail}
                         onChange={(e) => setFormData({...formData, notificationEmail: e.target.value})}
-                        required
+                        placeholder="me@example.com"
                     />
-                    {errors.notificationEmail && (
-                        <div className="error-message">{errors.notificationEmail}</div>
-                    )}
-                </div>
-                <div>
-                    <label>Gitユーザー名:</label>
-                    <input
+                </Field>
+                {errors.notificationEmail && (
+                    <div className="error-message">{errors.notificationEmail}</div>
+                )}
+
+                <Field label="Gitユーザー名">
+                    <Input
                         type="text"
                         value={formData.gitName}
                         onChange={(e) => setFormData({...formData, gitName: e.target.value})}
                         required
                     />
-                    {errors.gitName && (
-                        <div className="error-message">{errors.gitName}</div>
-                    )}
-                </div>
-                <div>
-                    <label>通知時間:</label>
-                    <div>
-                        <select
-                            value={formData.time.split(':')[0]}
-                            onChange={handleHourChange}
-                            required
-                        >
-                            {Array.from({ length: 24 }, (_, hour) => (
-                                <option key={hour} value={String(hour).padStart(2, '0')}>
-                                    {String(hour).padStart(2, '0')}
-                                </option>
-                            ))}
-                        </select>
-                        :
-                        <select
-                            value={formData.time.split(':')[1]}
-                            onChange={handleMinuteChange}
-                            required
-                        >
-                            {['00', '15', '30', '45'].map(minute => (
-                                <option key={minute} value={minute}>
-                                    {minute}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    {errors.time && (
-                        <div className="error-message">{errors.time}</div>
-                    )}
-                </div>
-                <button type="submit">登録</button>
-            </form>
-        </div>
+                </Field>
+                {errors.gitName && (
+                    <div className="error-message">{errors.gitName}</div>
+                )}
+
+                <Field label="通知時間">
+                    <Stack direction="row" alignItems="center" spacing={2}>
+                        <NativeSelectRoot>
+                            <NativeSelectField
+                                name="hour"
+                                items={Array.from({ length: 24 }, (_, hour) => String(hour).padStart(2, '0'))}
+                                value={formData.time.split(':')[0]}
+                                onChange={handleHourChange}
+                            />
+                        </NativeSelectRoot>
+                        <span>:</span>
+                        <NativeSelectRoot>
+                            <NativeSelectField
+                                name="minute"
+                                items={['00', '15', '30', '45']}
+                                value={formData.time.split(':')[1]}
+                                onChange={handleMinuteChange}
+                            />
+                        </NativeSelectRoot>
+                    </Stack>
+                </Field>
+                {errors.time && (
+                    <div className="error-message">{errors.time}</div>
+                )}
+            </Fieldset.Content>
+
+            <Button type="submit" alignSelf="flex-start">
+                登録
+            </Button>
+        </Fieldset.Root>
     );
 }
 

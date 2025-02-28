@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './Header.css';
+import { FaHome, FaInfoCircle, FaUser, FaSignOutAlt } from 'react-icons/fa';
 
 function Header({ children }) {
     const { user, loginWithGoogle, logout } = useAuth();
@@ -48,14 +49,20 @@ function Header({ children }) {
     return (
         <>
             <div className="header">
-                {['ホーム', 'プロフィール', 'チャンネル', '設定', '個人情報', 'ヘルプ', 'サインアウト'].map((item, index) => (
+                {[
+                    { icon: <FaHome />, label: 'ホーム' },
+                    { icon: <FaInfoCircle />, label: 'サイトについて' },
+                    { icon: <FaUser />, label: '個人情報' },
+                    { icon: <FaSignOutAlt />, label: 'サインアウト' }
+                ].map((item, index) => (
                     <a
                         key={index}
                         href="#"
                         className={`nav-item ${activeIndex === index ? 'active' : ''}`}
                         onClick={() => handleClick(index)}
                     >
-                        {item}
+                        {item.icon}
+                        <span className="nav-label">{item.label}</span>
                     </a>
                 ))}
             </div>

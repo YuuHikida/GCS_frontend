@@ -2,27 +2,34 @@
     position: fixed;
     top: 0;
     width: 100%;
-    background-color: #6557c3; /* ヘッダーの背景色 */
+    background: linear-gradient(90deg, #6557c3, #d97a3f); /* グラデーション */
     display: flex;
     justify-content: space-around;
     padding: 10px 0;
     z-index: 1000;
-    box-shadow: 0 -10px 0 #d97a3f inset; /* オレンジ色のラインを内側に配置 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* シャドウ */
 }
 
 .nav-item {
     color: white;
     padding: 10px 20px;
     text-decoration: none;
-    transition: background-color 0.3s;
-    position: relative; /* 相対位置を設定 */
+    transition: background-color 0.3s, transform 0.3s;
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .nav-item:hover,
 .nav-item.active {
-    background-color: #d97a3f; /* オレンジ色 */
+    background-color: rgba(217, 122, 63, 0.8); /* 半透明のオレンジ色 */
     border-radius: 10px;
-    z-index: 1; /* オレンジ色を前面に */
+    transform: scale(1.05); /* 拡大 */
+}
+
+.nav-label {
+    margin-left: 8px; /* アイコンとラベルの間隔 */
+    font-family: 'Roboto', sans-serif; /* モダンなフォント */
 }
 
 /* レスポンシブデザイン */

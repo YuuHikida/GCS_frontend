@@ -3,20 +3,24 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background: linear-gradient(135deg, #6557c3, #d97a3f); /* グラデーションの設定: 左上から右下に色が変わる */
-    color: white;
-    text-align: center;
+    background: linear-gradient(135deg, #6557c3, #d97a3f); /* グラデーションの設定 */
     padding: 20px;
     box-sizing: border-box;
 }
 
 .hero-content {
     max-width: 600px;
+    background-color: rgba(255, 255, 255, 0.8); /* 背景を白にして透明度を調整 */
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 影を追加 */
+    margin: 0 20px; /* 左右に余白を追加 */
 }
 
 .hero-button {
-    background-color: #fff;
-    color: #6557c3;
+    background-color: #6557c3;
+    color: #fff;
     border: none;
     padding: 10px 20px;
     font-size: 16px;
@@ -26,8 +30,8 @@
 }
 
 .hero-button:hover {
-    background-color: #6557c3;
-    color: #fff;
+    background-color: #fff;
+    color: #6557c3;
 }
 
 @media (max-width: 768px) {

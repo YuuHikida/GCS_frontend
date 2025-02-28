@@ -36,7 +36,8 @@ function Welcome() {
             <div className="hero-content">
                 <h1>ようこそ！</h1>
                 <p>このウェブサイトは、ユーザーが追加情報を入力するための登録フォームを提供します。</p>
-                <button onClick={handleLogin} className="hero-button">Googleでログイン</button>
+                <p>嗚呼あああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ</p>
+                <button onClick={handleLogin} className="hero-button">GoogleIDで新規登録/ログイン</button>
             </div>
         </div>
     );
