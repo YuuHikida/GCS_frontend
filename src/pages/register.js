@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Button, Fieldset, Input, Stack } from "@chakra-ui/react";
+import { Button, Fieldset, Input, Stack, Box } from "@chakra-ui/react";
 import { Field } from "../components/ui/field";
 import {
   NativeSelectField,
@@ -95,12 +95,12 @@ function Register() {
 
     // <ToastContainer />このコンポーネントがポップアップ表示管理
     return (
-        <>
+        <Box maxWidth="600px" margin="0 auto" padding="0 10%">
             <form onSubmit={handleSubmit}>
-                <Fieldset.Root size="lg" maxW="md">
-                    <Stack>
-                        <Fieldset.Legend>ユーザー登録</Fieldset.Legend>
-                        <Fieldset.HelperText>
+                <Fieldset.Root size="lg">
+                    <Stack spacing={4}>
+                        <Fieldset.Legend fontSize="2xl">ユーザー登録</Fieldset.Legend>
+                        <Fieldset.HelperText fontSize="lg">
                             以下に必要な情報を入力してください。
                         </Fieldset.HelperText>
                     </Stack>
@@ -112,6 +112,9 @@ function Register() {
                                 value={formData.notificationEmail}
                                 onChange={(e) => setFormData({...formData, notificationEmail: e.target.value})}
                                 placeholder="me@example.com"
+                                width="140%"
+                                fontSize="md"
+                                borderColor="gray.300"
                             />
                         </Field>
 
@@ -121,17 +124,23 @@ function Register() {
                                 value={formData.gitName}
                                 onChange={(e) => setFormData({...formData, gitName: e.target.value})}
                                 required
+                                width="140%"
+                                fontSize="md"
+                                borderColor="gray.300"
                             />
                         </Field>
 
                         <Field label="通知時間">
-                            <Stack direction="row" alignItems="center" spacing={2}>
+                            <Stack direction={{ base: "column", md: "row" }} alignItems="center" spacing={2}>
                                 <NativeSelectRoot>
                                     <NativeSelectField
                                         name="hour"
                                         items={Array.from({ length: 24 }, (_, hour) => String(hour).padStart(2, '0'))}
                                         value={formData.time.split(':')[0]}
                                         onChange={handleHourChange}
+                                        backgroundColor="gray.100"
+                                        borderColor="gray.300"
+                                        width="100%"
                                     />
                                 </NativeSelectRoot>
                                 <span>:</span>
@@ -141,19 +150,22 @@ function Register() {
                                         items={['00', '15', '30', '45']}
                                         value={formData.time.split(':')[1]}
                                         onChange={handleMinuteChange}
+                                        backgroundColor="gray.100"
+                                        borderColor="gray.300"
+                                        width="100%"
                                     />
                                 </NativeSelectRoot>
                             </Stack>
                         </Field>
                     </Fieldset.Content>
 
-                    <Button type="submit" alignSelf="flex-start">
+                    <Button type="submit" alignSelf="flex-start" fontSize="lg">
                         登録
                     </Button>
                 </Fieldset.Root>
             </form>
             <ToastContainer />
-        </>
+        </Box>
     );
 }
 
