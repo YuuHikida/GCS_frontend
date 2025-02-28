@@ -7,6 +7,8 @@ import {
   NativeSelectField,
   NativeSelectRoot,
 } from "../components/ui/native-select";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 /*概要説明等
 目的：
@@ -33,6 +35,7 @@ function Register() {
 
     //エラー状態の管理
     const [errors, setErrors] = useState({
+        googleId: '',
         notificationEmail: '',
         gitName: '',
         time: ''
@@ -64,11 +67,17 @@ function Register() {
             if (data.success) {
                 navigate('/dashboard');
             } else {
-                // エラーメッセージを設定
+                // エラーメッセージをポップアップで表示
+                if (data.errors) {
+                    Object.values(data.errors).forEach(error => {
+                        toast.error(error);
+                    });
+                }
                 setErrors(data.errors || {});
             }
         } catch (error) {
             console.error("登録エラー:", error);
+            toast.error("登録中にエラーが発生しました。");
         }
     };
 
@@ -84,70 +93,67 @@ function Register() {
         setFormData({...formData, time: `${hours}:${newMinute}`});
     };
 
+    // <ToastContainer />このコンポーネントがポップアップ表示管理
     return (
-        <Fieldset.Root size="lg" maxW="md">
-            <Stack>
-                <Fieldset.Legend>ユーザー登録</Fieldset.Legend>
-                <Fieldset.HelperText>
-                    以下に必要な情報を入力してください。
-                </Fieldset.HelperText>
-            </Stack>
-
-            <Fieldset.Content>
-                <Field label="通知用メールアドレス">
-                    <Input
-                        type="email"
-                        value={formData.notificationEmail}
-                        onChange={(e) => setFormData({...formData, notificationEmail: e.target.value})}
-                        placeholder="me@example.com"
-                    />
-                </Field>
-                {errors.notificationEmail && (
-                    <div className="error-message">{errors.notificationEmail}</div>
-                )}
-
-                <Field label="Gitユーザー名">
-                    <Input
-                        type="text"
-                        value={formData.gitName}
-                        onChange={(e) => setFormData({...formData, gitName: e.target.value})}
-                        required
-                    />
-                </Field>
-                {errors.gitName && (
-                    <div className="error-message">{errors.gitName}</div>
-                )}
-
-                <Field label="通知時間">
-                    <Stack direction="row" alignItems="center" spacing={2}>
-                        <NativeSelectRoot>
-                            <NativeSelectField
-                                name="hour"
-                                items={Array.from({ length: 24 }, (_, hour) => String(hour).padStart(2, '0'))}
-                                value={formData.time.split(':')[0]}
-                                onChange={handleHourChange}
-                            />
-                        </NativeSelectRoot>
-                        <span>:</span>
-                        <NativeSelectRoot>
-                            <NativeSelectField
-                                name="minute"
-                                items={['00', '15', '30', '45']}
-                                value={formData.time.split(':')[1]}
-                                onChange={handleMinuteChange}
-                            />
-                        </NativeSelectRoot>
+        <>
+            <form onSubmit={handleSubmit}>
+                <Fieldset.Root size="lg" maxW="md">
+                    <Stack>
+                        <Fieldset.Legend>ユーザー登録</Fieldset.Legend>
+                        <Fieldset.HelperText>
+                            以下に必要な情報を入力してください。
+                        </Fieldset.HelperText>
                     </Stack>
-                </Field>
-                {errors.time && (
-                    <div className="error-message">{errors.time}</div>
-                )}
-            </Fieldset.Content>
 
-            <Button type="submit" alignSelf="flex-start">
-                登録
-            </Button>
-        </Fieldset.Root>
+                    <Fieldset.Content>
+                        <Field label="通知用メールアドレス">
+                            <Input
+                                type="email"
+                                value={formData.notificationEmail}
+                                onChange={(e) => setFormData({...formData, notificationEmail: e.target.value})}
+                                placeholder="me@example.com"
+                            />
+                        </Field>
+
+                        <Field label="Gitユーザー名">
+                            <Input
+                                type="text"
+                                value={formData.gitName}
+                                onChange={(e) => setFormData({...formData, gitName: e.target.value})}
+                                required
+                            />
+                        </Field>
+
+                        <Field label="通知時間">
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                                <NativeSelectRoot>
+                                    <NativeSelectField
+                                        name="hour"
+                                        items={Array.from({ length: 24 }, (_, hour) => String(hour).padStart(2, '0'))}
+                                        value={formData.time.split(':')[0]}
+                                        onChange={handleHourChange}
+                                    />
+                                </NativeSelectRoot>
+                                <span>:</span>
+                                <NativeSelectRoot>
+                                    <NativeSelectField
+                                        name="minute"
+                                        items={['00', '15', '30', '45']}
+                                        value={formData.time.split(':')[1]}
+                                        onChange={handleMinuteChange}
+                                    />
+                                </NativeSelectRoot>
+                            </Stack>
+                        </Field>
+                    </Fieldset.Content>
+
+                    <Button type="submit" alignSelf="flex-start">
+                        登録
+                    </Button>
+                </Fieldset.Root>
+            </form>
+            <ToastContainer />
+        </>
     );
 }
 
