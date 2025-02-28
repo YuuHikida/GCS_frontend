@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Button, Fieldset, Input, Stack, Box } from "@chakra-ui/react";
+import { Button, Fieldset, Input, Stack, Box, HStack, VStack, Text } from "@chakra-ui/react";
 import { Field } from "../components/ui/field";
 import {
   NativeSelectField,
@@ -9,6 +9,11 @@ import {
 } from "../components/ui/native-select";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {
+  RadioCardItem,
+  RadioCardLabel,
+  RadioCardRoot,
+} from "../components/ui/radio-card";
 
 /*概要説明等
 目的：
@@ -33,6 +38,8 @@ function Register() {
         time: '21:30'
     });
 
+    const [selectedEmailOption, setSelectedEmailOption] = useState('google');
+
     //エラー状態の管理
     const [errors, setErrors] = useState({
         googleId: '',
@@ -45,6 +52,16 @@ function Register() {
     React.useEffect(() => {
         console.log('Current user:', user);
     }, [user]);
+
+    // useEffectを追加してuseGoogleEmailの変更を監視
+    React.useEffect(() => {
+        if (selectedEmailOption === 'google') {
+            setFormData((prevData) => ({
+                ...prevData,
+                notificationEmail: user?.email || ''
+            }));
+        }
+    }, [selectedEmailOption, user]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -81,6 +98,16 @@ function Register() {
         }
     };
 
+    const handleEmailOptionChange = (value) => {
+        setSelectedEmailOption(value);
+        if (value === 'google') {
+            setFormData(prev => ({
+                ...prev,
+                notificationEmail: user?.email || ''
+            }));
+        }
+    };
+
     const handleHourChange = (e) => {
         const newHour = e.target.value;
         const [_, minutes] = formData.time.split(':');
@@ -92,6 +119,19 @@ function Register() {
         const [hours, _] = formData.time.split(':');
         setFormData({...formData, time: `${hours}:${newMinute}`});
     };
+
+    const emailOptions = [
+        {
+            value: 'google',
+            title: 'Googleに登録されたメールアドレスを使用',
+            description: user?.email
+        },
+        {
+            value: 'custom',
+            title: '自分で入力',
+            description: '別のメールアドレスを使用'
+        }
+    ];
 
     // <ToastContainer />このコンポーネントがポップアップ表示管理
     return (
@@ -106,16 +146,69 @@ function Register() {
                     </Stack>
 
                     <Fieldset.Content>
-                        <Field label="通知用メールアドレス">
-                            <Input
-                                type="email"
-                                value={formData.notificationEmail}
-                                onChange={(e) => setFormData({...formData, notificationEmail: e.target.value})}
-                                placeholder="me@example.com"
-                                width="140%"
-                                fontSize="md"
-                                borderColor="gray.300"
-                            />
+                        <Field label="通知用メールアドレスの選択">
+                            <VStack align="stretch" spacing={4}>
+                                <HStack spacing={3} align="stretch">
+                                    <Box 
+                                        p={3} 
+                                        border="1px solid" 
+                                        borderColor={selectedEmailOption === 'google' ? "blue.500" : "gray.200"}
+                                        borderRadius="md"
+                                        cursor="pointer"
+                                        onClick={() => handleEmailOptionChange('google')}
+                                        bg={selectedEmailOption === 'google' ? "blue.50" : "white"}
+                                        flex="1"
+                                        maxW="50%"
+                                        transition="all 0.2s"
+                                        _hover={{
+                                            borderColor: "blue.500",
+                                            bg: "blue.50"
+                                        }}
+                                    >
+                                        <Text fontWeight="bold" fontSize="sm">
+                                            Googleに登録されたメールアドレスを使用
+                                        </Text>
+                                        <Text color="gray.600" fontSize="sm" mt={1}>
+                                            {user?.email}
+                                        </Text>
+                                    </Box>
+                                    <Box 
+                                        p={3}
+                                        border="1px solid" 
+                                        borderColor={selectedEmailOption === 'custom' ? "blue.500" : "gray.200"}
+                                        borderRadius="md"
+                                        cursor="pointer"
+                                        onClick={() => handleEmailOptionChange('custom')}
+                                        bg={selectedEmailOption === 'custom' ? "blue.50" : "white"}
+                                        flex="1"
+                                        maxW="50%"
+                                        transition="all 0.2s"
+                                        _hover={{
+                                            borderColor: "blue.500",
+                                            bg: "blue.50"
+                                        }}
+                                    >
+                                        <Text fontWeight="bold" fontSize="sm">
+                                            自分で入力
+                                        </Text>
+                                        <Text color="gray.600" fontSize="sm" mt={1}>
+                                            別のメールアドレスを使用
+                                        </Text>
+                                    </Box>
+                                </HStack>
+                                {selectedEmailOption === 'custom' && (
+                                    <Input
+                                        mt={2}
+                                        type="email"
+                                        value={formData.notificationEmail}
+                                        onChange={(e) => setFormData({...formData, notificationEmail: e.target.value})}
+                                        placeholder="me@example.com"
+                                        width="100%"
+                                        fontSize="sm"
+                                        borderColor="gray.300"
+                                    />
+                                )}
+                            </VStack>
                         </Field>
 
                         <Field label="Gitユーザー名">
