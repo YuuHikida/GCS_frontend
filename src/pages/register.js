@@ -32,7 +32,7 @@ import {
 */
 
 function Register() {
-    const { user } = useAuth();
+    const { user, completeRegistration } = useAuth();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         notificationEmail: user?.email || '',
@@ -84,7 +84,7 @@ function Register() {
             const data = await response.json();
             
             if (data.success) {
-                navigate('/dashboard');
+                handleRegistrationComplete();
             } else {
                 // エラーメッセージをポップアップで表示
                 if (data.errors) {
@@ -120,6 +120,12 @@ function Register() {
         const newMinute = e.target.value;
         const [hours, _] = formData.time.split(':');
         setFormData({...formData, time: `${hours}:${newMinute}`});
+    };
+
+    const handleRegistrationComplete = () => {
+        // 登録処理が完了したら
+        completeRegistration(user.uid);
+        navigate('/dashboard');
     };
 
     const emailOptions = [

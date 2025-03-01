@@ -36,27 +36,38 @@ function Header({ children }) {
     const handleLogout = async () => {
         try {
             await logout();
-            navigate('/login');
+            navigate('/');
         } catch (error) {
             console.error("ログアウトエラー:", error);
         }
     };
 
     const handleClick = (index) => {
+        console.log("handleClick開始 - index:", index);
         setActiveIndex(index);
+        // 登録が完了していない場合をチェック
+        const isRegistered = localStorage.getItem(`registered_${user?.uid}`);
+        const registrationPending = localStorage.getItem('registration_pending');
+
+        if (!isRegistered && registrationPending) {
+            alert('登録を完了すると、これらの機能にアクセスできるようになります。\n登録を完了してください。');
+            return;
+        }
+
         switch(index) {
-            case 0: // ホーム
+            case 0:
                 navigate('/dashboard');
                 break;
-            case 1: // サイトについて
+            case 1:
                 navigate('/about');
                 break;
-            case 2: // 個人情報
+            case 2:
                 navigate('/profile');
                 break;
-            case 3: // サインアウト
+            case 3:
+                console.log("ログアウト処理呼び出し");
                 handleLogout();
-                break;
+                return;
             default:
                 break;
         }
@@ -69,13 +80,20 @@ function Header({ children }) {
                     { icon: <FaHome />, label: 'ホーム', path: '/dashboard' },
                     { icon: <FaInfoCircle />, label: 'サイトについて', path: '/about' },
                     { icon: <FaUser />, label: '個人情報', path: '/profile' },
-                    { icon: <FaSignOutAlt />, label: 'サインアウト', path: '#' }
+                    { icon: <FaSignOutAlt />, label: 'サインアウト', path: '/' }
                 ].map((item, index) => (
                     <a
                         key={index}
                         href={item.path}
-                        className={`nav-item ${activeIndex === index ? 'active' : ''}`}
-                        onClick={() => handleClick(index)}
+                        className={`nav-item ${activeIndex === index ? 'active' : ''} ${
+                            !localStorage.getItem(`registered_${user?.uid}`) && 
+                            localStorage.getItem('registration_pending') ? 
+                            'disabled' : ''
+                        }`}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            handleClick(index);
+                        }}
                     >
                         {item.icon}
                         <span className="nav-label">{item.label}</span>

@@ -8,28 +8,41 @@ import Dashboard from './pages/dashboard';
 import Header from './components/Header';
 import Welcome from './pages/Welcome';
 import About from './pages/About';
+import Profile from './pages/Profile';
 
 /**
  * アプリケーションのメインコンポーネント
  * ルーティング設定を管理し、各ページへの遷移を制御
  * 
  * ルーティング構成:
- * / -> ログインページにリダイレクト
- * /login -> 未認証ユーザー用のログインページ
- * /register -> 認証済みユーザーの登録ページ（PrivateRoute保護）
- * /dashboard -> 認証済みユーザーのダッシュボード（PrivateRoute保護）
+ * / -> ウェルカムページ（未認証可）
+ * /register -> 新規登録ページ（未認証可）
+ * /login -> ログインページ（PrivateRoute保護）
+ * /dashboard -> ダッシュボード（PrivateRoute保護）
+ * /about -> サイト説明（PrivateRoute保護）
+ * /profile -> プロフィールページ（PrivateRoute保護）
  */
-
-
 
 function App() {
     return (
         <Routes>
             <Route path="/" element={<Welcome />} />
             <Route path="/register" element={<Header disableAuthButtons={true}><Register /></Header>} />
-            <Route path="/dashboard" element={<Header><Dashboard /></Header>} />
-            <Route path="/login" element={<Header><Login /></Header>} />
-            <Route path="/about" element={<Header><About /></Header>} />
+            <Route path="/dashboard" element={
+                <PrivateRoute>
+                    <Header><Dashboard /></Header>
+                </PrivateRoute>
+            } />
+            <Route path="/about" element={
+                <PrivateRoute>
+                    <Header><About /></Header>
+                </PrivateRoute>
+            } />
+            <Route path="/profile" element={
+                <PrivateRoute>
+                    <Header><Profile /></Header>
+                </PrivateRoute>
+            } />
         </Routes>
     );
 }

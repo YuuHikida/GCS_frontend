@@ -18,6 +18,17 @@ export function PrivateRoute({ children }) {
         return <div>Loading...</div>;
     }
 
-    // 未認証ユーザーはログインページへリダイレクト
-    return user ? children : <Navigate to="/login" />;
+    if (!user) {
+        return <Navigate to="/" />;
+    }
+
+    // 登録が完了していない場合
+    const isRegistered = localStorage.getItem(`registered_${user.uid}`);
+    const registrationPending = localStorage.getItem('registration_pending');
+    
+    if (!isRegistered && registrationPending) {
+        return <Navigate to="/register" />;
+    }
+
+    return children;
 } 

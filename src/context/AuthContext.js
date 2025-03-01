@@ -36,11 +36,15 @@ export function AuthProvider({ children }) {
     //ローディング状態を管理    
     const [loading, setLoading] = useState(true);
 
-    // Googleログイン処理
+    // Googleログイン処理に登録状態チェックを追加
     const loginWithGoogle = async () => {
         const provider = new GoogleAuthProvider();
         try {
             const result = await signInWithPopup(auth, provider);
+            // 新規ユーザーの場合、未登録フラグを設定
+            if (!localStorage.getItem(`registered_${result.user.uid}`)) {
+                localStorage.setItem('registration_pending', 'true');
+            }
             return result.user;
         } catch (error) {
             console.error("Google login failed:", error);
@@ -51,6 +55,12 @@ export function AuthProvider({ children }) {
     // ログアウト処理
     const logout = () => {
         return signOut(auth);
+    };
+
+    // 登録完了を記録する関数を追加
+    const completeRegistration = (uid) => {
+        localStorage.setItem(`registered_${uid}`, 'true');
+        localStorage.removeItem('registration_pending');
     };
 
     // Firebase認証の状態を監視
@@ -68,7 +78,8 @@ export function AuthProvider({ children }) {
     const value = {
         user,
         loginWithGoogle,
-        logout
+        logout,
+        completeRegistration  // 新しい関数を追加
     };
 
     return (

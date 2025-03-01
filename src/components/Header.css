@@ -55,3 +55,13 @@
         margin-top: 100px; /* 小さい画面用の余白を調整 */
     }
 }
+
+.nav-item.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: all !important;
+}
+
+.nav-item.disabled:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
