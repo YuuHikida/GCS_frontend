@@ -9,6 +9,7 @@ import {
 } from "../components/ui/native-select";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import SuccessPopup from '../components/SuccessPopup';
 
 import {
     AccordionItem,
@@ -49,6 +50,8 @@ function Register() {
         gitName: '',
         time: ''
     });
+
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
     //デバック
     React.useEffect(() => {
@@ -123,9 +126,13 @@ function Register() {
     };
 
     const handleRegistrationComplete = () => {
-        // 登録処理が完了したら
-        completeRegistration(user.uid);
-        navigate('/dashboard');
+        //localStorageに登録完了フラグをセット(これ無いとダッシュボードに遷移しない)
+        localStorage.setItem(`registered_${user.uid}`, 'true');
+        setShowSuccessPopup(true);
+    };
+
+    const handlePopupClose = () => {
+        setShowSuccessPopup(false);
     };
 
     const emailOptions = [
@@ -289,6 +296,13 @@ function Register() {
                     </Button>
                 </Fieldset.Root>
             </form>
+            
+            <SuccessPopup
+                isOpen={showSuccessPopup}
+                onClose={handlePopupClose}
+                message="登録が完了しました"
+            />
+            
             <ToastContainer />
         </Box>
     );

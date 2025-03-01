@@ -11,15 +11,15 @@ import { Provider } from'./components/ui/provider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <Provider>
   <React.StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </BrowserRouter>
+    <Provider>
+      <BrowserRouter>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
-  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function
