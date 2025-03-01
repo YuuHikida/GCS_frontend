@@ -34,21 +34,23 @@ function Welcome() {
     return (
         <div className="hero-section">
             <div className="hero-content">
-                <div className="hero-text">
-                    <h1>GCS(GithubContributeSystem)とは</h1>
-                    <p className="hero-description">
-                        自分のGithubのContributeを毎日通知時間に検索し、コミットがない場合、
-                        貴方の登録したメールに通知を行います。
-                    </p>
-                    <p className="hero-sub-description">
-                        毎日Gitへのコミットを行い、プログラムへの学習習慣をつけましょう
-                    </p>
-                    <button onClick={handleLogin} className="hero-button">
-                        GoogleIDで新規登録/ログイン
+                <div className="glass-card">
+                    <h1 className="title">
+                        <span>GCS</span>
+                        <span className="subtitle">~GithubContributeSystem(GCS)とは~</span>
+                    </h1>
+                    <div className="description-container">
+                        <p className="hero-description">
+                            貴方のGithubのContributeを毎日任意の時間に検索し、コミットがない場合、
+                            貴方の登録したメールに通知を行います。
+                        </p>
+                        <p className="hero-sub-description">
+                            毎日Gitへのコミットを行い、プログラムへの学習習慣をつけましょう
+                        </p>
+                    </div>
+                    <button onClick={handleLogin} className="login-button">
+                        <span className="button-text">GoogleIDで新規登録/ログイン</span>
                     </button>
-                </div>
-                <div className="hero-image">
-                    <img src="/githubDisplayIMG.jpg" alt="GitHub Contribution" />
                 </div>
             </div>
         </div>
