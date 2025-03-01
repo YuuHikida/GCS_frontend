@@ -7,6 +7,7 @@ import Register from './pages/register';
 import Dashboard from './pages/dashboard';
 import Header from './components/Header';
 import Welcome from './pages/Welcome';
+import About from './pages/About';
 
 /**
  * アプリケーションのメインコンポーネント
@@ -28,6 +29,7 @@ function App() {
             <Route path="/register" element={<Header disableAuthButtons={true}><Register /></Header>} />
             <Route path="/dashboard" element={<Header><Dashboard /></Header>} />
             <Route path="/login" element={<Header><Login /></Header>} />
+            <Route path="/about" element={<Header><About /></Header>} />
         </Routes>
     );
 }

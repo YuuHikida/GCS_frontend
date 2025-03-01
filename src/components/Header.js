@@ -44,20 +44,36 @@ function Header({ children }) {
 
     const handleClick = (index) => {
         setActiveIndex(index);
+        switch(index) {
+            case 0: // ホーム
+                navigate('/dashboard');
+                break;
+            case 1: // サイトについて
+                navigate('/about');
+                break;
+            case 2: // 個人情報
+                navigate('/profile');
+                break;
+            case 3: // サインアウト
+                handleLogout();
+                break;
+            default:
+                break;
+        }
     };
 
     return (
         <>
             <div className="header">
                 {[
-                    { icon: <FaHome />, label: 'ホーム' },
-                    { icon: <FaInfoCircle />, label: 'サイトについて' },
-                    { icon: <FaUser />, label: '個人情報' },
-                    { icon: <FaSignOutAlt />, label: 'サインアウト' }
+                    { icon: <FaHome />, label: 'ホーム', path: '/dashboard' },
+                    { icon: <FaInfoCircle />, label: 'サイトについて', path: '/about' },
+                    { icon: <FaUser />, label: '個人情報', path: '/profile' },
+                    { icon: <FaSignOutAlt />, label: 'サインアウト', path: '#' }
                 ].map((item, index) => (
                     <a
                         key={index}
-                        href="#"
+                        href={item.path}
                         className={`nav-item ${activeIndex === index ? 'active' : ''}`}
                         onClick={() => handleClick(index)}
                     >

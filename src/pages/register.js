@@ -9,11 +9,13 @@ import {
 } from "../components/ui/native-select";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 import {
-  RadioCardItem,
-  RadioCardLabel,
-  RadioCardRoot,
-} from "../components/ui/radio-card";
+    AccordionItem,
+    AccordionItemContent,
+    AccordionItemTrigger,
+    AccordionRoot,
+} from "../components/ui/accordion"
 
 /*概要説明等
 目的：
@@ -212,15 +214,39 @@ function Register() {
                         </Field>
 
                         <Field label="Gitユーザー名">
-                            <Input
-                                type="text"
-                                value={formData.gitName}
-                                onChange={(e) => setFormData({...formData, gitName: e.target.value})}
-                                required
-                                width="140%"
-                                fontSize="md"
-                                borderColor="gray.300"
-                            />
+                            <VStack align="stretch" spacing={2}>
+                                <Input
+                                    type="text"
+                                    value={formData.gitName}
+                                    onChange={(e) => setFormData({...formData, gitName: e.target.value})}
+                                    required
+                                    width="140%"
+                                    fontSize="md"
+                                    borderColor="gray.300"
+                                />
+                                <AccordionRoot collapsible>
+                                    <AccordionItem value="git-help">
+                                        <AccordionItemTrigger>
+                                            Gitユーザー名とは？
+                                        </AccordionItemTrigger>
+                                        <AccordionItemContent>
+                                            <VStack align="start" spacing={2}>
+                                                <Text>
+                                                    自分のGitHubのプロフィールURLの末尾の文字列です。
+                                                </Text>
+                                                <Box p={2} bg="gray.50" borderRadius="md">
+                                                    <Text>
+                                                        例：https://github.com/<Text as="span" fontWeight="bold" color="blue.500">TanakaTaro</Text>
+                                                    </Text>
+                                                    <Text fontSize="sm" color="gray.600" mt={1}>
+                                                        この場合、ユーザー名は「TanakaTaro」となります
+                                                    </Text>
+                                                </Box>
+                                            </VStack>
+                                        </AccordionItemContent>
+                                    </AccordionItem>
+                                </AccordionRoot>
+                            </VStack>
                         </Field>
 
                         <Field label="通知時間">
