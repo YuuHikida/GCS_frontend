@@ -9,6 +9,9 @@ function Header({ children }) {
     const navigate = useNavigate();
     const [activeIndex, setActiveIndex] = useState(null);
 
+    // 登録が完了しているかどうかを確認
+    const isRegistered = localStorage.getItem(`registered_${user?.uid}`);
+
     const handleLogin = async () => {
         try {
             const result = await loginWithGoogle();
@@ -44,11 +47,9 @@ function Header({ children }) {
 
     const handleClick = (index) => {
         setActiveIndex(index);
-        // 登録が完了していない場合をチェック
-        const isRegistered = localStorage.getItem(`registered_${user?.uid}`);
-        const registrationPending = localStorage.getItem('registration_pending');
 
-        if (!isRegistered && registrationPending) {
+        // 登録が完了していない場合をチェック
+        if (!isRegistered) {
             alert('登録を完了すると、これらの機能にアクセスできるようになります。\n登録を完了してください。');
             return;
         }
@@ -89,13 +90,15 @@ function Header({ children }) {
                         key={index}
                         href={item.path}
                         className={`nav-item ${activeIndex === index ? 'active' : ''} ${
-                            !localStorage.getItem(`registered_${user?.uid}`) && 
-                            localStorage.getItem('registration_pending') ? 
-                            'disabled' : ''
+                            !isRegistered ? 'disabled' : ''
                         }`}
                         onClick={(e) => {
                             e.preventDefault();
                             handleClick(index);
+                        }}
+                        style={{
+                            pointerEvents: !isRegistered ? 'none' : 'auto',
+                            opacity: !isRegistered ? 0.5 : 1
                         }}
                     >
                         {item.icon}
