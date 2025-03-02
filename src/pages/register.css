@@ -1,0 +1,13 @@
+.chakra-accordion__itemTrigger {
+    background-color: #ffffff; /* 任意の背景色に変更 */
+    color: #333; /* テキストの色 */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.chakra-accordion__itemTrigger:hover {
+    background-color: #e0e0e0; /* ホバー時の背景色 */
+}

@@ -10,6 +10,7 @@ import {
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SuccessPopup from '../components/SuccessPopup';
+import './register.css';
 
 import {
     AccordionItem,
@@ -239,7 +240,7 @@ function Register() {
                                 />
                                 <AccordionRoot collapsible>
                                     <AccordionItem value="git-help">
-                                        <AccordionItemTrigger>
+                                        <AccordionItemTrigger className="accordion-trigger">
                                             Gitユーザー名とは？
                                         </AccordionItemTrigger>
                                         <AccordionItemContent>
