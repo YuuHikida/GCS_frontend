@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { getAuth } from "firebase/auth";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './Profile.css';
+import SuccessPopup from '../components/SuccessPopup';
 
 function Profile() {
     const auth = getAuth();
@@ -12,17 +15,18 @@ function Profile() {
         gitName: '',
         notificationEmail: ''
     });
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
     useEffect(() => {
         const fetchUserInfo = async () => {
             if (user) {
                 try {
-                    const idToken = await user.getIdToken(); // トークンを取得
+                    const idToken = await user.getIdToken();
                     const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/user/info`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${idToken}` // トークンをヘッダーに追加
+                            'Authorization': `Bearer ${idToken}`
                         },
                         body: JSON.stringify({ uid: user.uid })
                     });
@@ -50,9 +54,32 @@ function Profile() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({
+
+        if (name === "notificationTime") {
+            const [hours, minutes] = value.split(':').map(Number);
+            const roundedMinutes = Math.floor(minutes / 15) * 15;
+            const newTime = `${String(hours).padStart(2, '0')}:${String(roundedMinutes).padStart(2, '0')}`;
+            setFormData({
+                ...formData,
+                [name]: newTime
+            });
+        } else {
+            setFormData({
+                ...formData,
+                [name]: value
+            });
+        }
+    };
+
+    const handleTimeChange = (e) => {
+        const { name, value } = e.target;
+        const newTime = {
             ...formData,
             [name]: value
+        };
+        setFormData({
+            ...formData,
+            notificationTime: `${newTime.notificationHour || formData.notificationTime.split(':')[0]}:${newTime.notificationMinute || formData.notificationTime.split(':')[1]}`
         });
     };
 
@@ -69,23 +96,36 @@ function Profile() {
                 body: JSON.stringify({ uid: user.uid, ...formData })
             });
 
-            if (!response.ok) {
-                throw new Error('ユーザー情報の更新に失敗しました');
-            }
-
             const data = await response.json();
-            setUserInfo(data);
-            alert('ユーザー情報が更新されました');
+
+            if (data.success) {
+                setUserInfo(data);
+                setShowSuccessPopup(true);
+            } else {
+                if (data.message) {
+                    toast.error(data.message);
+                }
+                if (data.errors) {
+                    Object.values(data.errors).forEach(error => {
+                        toast.error(error);
+                    });
+                }
+                setError(data.errors || {});
+            }
         } catch (error) {
             console.error('エラー:', error);
-            setError(error.message);
+            toast.error("更新中にエラーが発生しました。");
         }
+    };
+
+    const handlePopupClose = () => {
+        setShowSuccessPopup(false);
     };
 
     return (
         <div className="profile-container">
-            <h1>プロフィール</h1>
-            {error && <p className="error">{error}</p>}
+            <h1>プロフィール編集</h1>
+            {error && <p className="error">{typeof error === 'string' ? error : 'エラーが発生しました'}</p>}
             {userInfo ? (
                 <form onSubmit={handleSubmit}>
                     <div className="info-item">
@@ -108,12 +148,30 @@ function Profile() {
                     </div>
                     <div className="info-item">
                         <label>通知時間:</label>
-                        <input
-                            type="time"
-                            name="notificationTime"
-                            value={formData.notificationTime}
-                            onChange={handleChange}
-                        />
+                        <div style={{ display: 'flex', gap: '10px' }}>
+                            <select
+                                name="notificationHour"
+                                value={formData.notificationTime.split(':')[0]}
+                                onChange={handleTimeChange}
+                            >
+                                {Array.from({ length: 24 }, (_, hour) => (
+                                    <option key={hour} value={String(hour).padStart(2, '0')}>
+                                        {String(hour).padStart(2, '0')}
+                                    </option>
+                                ))}
+                            </select>
+                            <select
+                                name="notificationMinute"
+                                value={formData.notificationTime.split(':')[1]}
+                                onChange={handleTimeChange}
+                            >
+                                {['00', '15', '30', '45'].map(minute => (
+                                    <option key={minute} value={minute}>
+                                        {minute}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
 
                     {userInfo.photoURL && (
@@ -126,6 +184,12 @@ function Profile() {
             ) : (
                 <p>ユーザー情報を読み込んでいます...</p>
             )}
+            <SuccessPopup
+                isOpen={showSuccessPopup}
+                onClose={handlePopupClose}
+                message="更新完了しました"
+            />
+            <ToastContainer />
         </div>
     );
 }

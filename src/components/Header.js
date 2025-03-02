@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './Header.css';
-import { FaHome, FaInfoCircle, FaUser, FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaInfoCircle, FaUser, FaSignOutAlt, FaTrophy } from 'react-icons/fa';
 
 function Header({ children }) {
     const { user, loginWithGoogle, logout } = useAuth();
@@ -43,7 +43,6 @@ function Header({ children }) {
     };
 
     const handleClick = (index) => {
-
         setActiveIndex(index);
         // 登録が完了していない場合をチェック
         const isRegistered = localStorage.getItem(`registered_${user?.uid}`);
@@ -65,6 +64,9 @@ function Header({ children }) {
                 navigate('/profile');
                 break;
             case 3:
+                alert('ランキング機能は現在準備中です！');
+                return;
+            case 4:
                 console.log("ログアウト処理呼び出し");
                 handleLogout();
                 return;
@@ -79,7 +81,8 @@ function Header({ children }) {
                 {[
                     { icon: <FaHome />, label: 'ホーム', path: '/dashboard' },
                     { icon: <FaInfoCircle />, label: 'サイトについて', path: '/about' },
-                    { icon: <FaUser />, label: '個人情報', path: '/profile' },
+                    { icon: <FaUser />, label: 'ユーザー情報編集', path: '/profile' },
+                    { icon: <FaTrophy />, label: 'ランキング', path: '/ranking' },
                     { icon: <FaSignOutAlt />, label: 'サインアウト', path: '/' }
                 ].map((item, index) => (
                     <a
