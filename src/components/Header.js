@@ -43,7 +43,7 @@ function Header({ children }) {
     };
 
     const handleClick = (index) => {
-        console.log("handleClick開始 - index:", index);
+
         setActiveIndex(index);
         // 登録が完了していない場合をチェック
         const isRegistered = localStorage.getItem(`registered_${user?.uid}`);
