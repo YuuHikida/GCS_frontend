@@ -151,12 +151,12 @@ function Register() {
 
     // <ToastContainer />このコンポーネントがポップアップ表示管理
     return (
-        <Box maxWidth="600px" margin="0 auto" padding="0 10%">
+        <Box className="container">
             <form onSubmit={handleSubmit}>
                 <Fieldset.Root size="lg">
                     <Stack spacing={4}>
-                        <Fieldset.Legend fontSize="2xl">ユーザー登録</Fieldset.Legend>
-                        <Fieldset.HelperText fontSize="lg">
+                        <Fieldset.Legend className="fieldset__legend">ユーザー登録</Fieldset.Legend>
+                        <Fieldset.HelperText className="fieldset__helperText">
                             以下に必要な情報を入力してください。
                         </Fieldset.HelperText>
                     </Stack>
@@ -234,9 +234,7 @@ function Register() {
                                     value={formData.gitName}
                                     onChange={(e) => setFormData({...formData, gitName: e.target.value})}
                                     required
-                                    width="140%"
-                                    fontSize="md"
-                                    borderColor="gray.300"
+                                    className="chakra-input"
                                 />
                                 <AccordionRoot collapsible>
                                     <AccordionItem value="git-help">
@@ -292,7 +290,7 @@ function Register() {
                         </Field>
                     </Fieldset.Content>
 
-                    <Button type="submit" alignSelf="flex-start" fontSize="lg">
+                    <Button type="submit" className="chakra-button">
                         登録
                     </Button>
                 </Fieldset.Root>

@@ -59,7 +59,7 @@
 .nav-item.disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    pointer-events: all !important;
+    pointer-events: none;
 }
 
 .nav-item.disabled:hover {
