@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import './Profile.css';
 import SuccessPopup from '../components/SuccessPopup';
 import DeleteUser from './DeleteUser';
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Button } from "@chakra-ui/react";
 
 function Profile() {
     const auth = getAuth();
@@ -189,7 +189,21 @@ function Profile() {
                                         <img src={userInfo.photoURL} alt="プロフィール写真" />
                                     </div>
                                 )}
-                                <button type="submit">更新</button>
+                                <Button
+                                    type="submit"
+                                    bg="#3182ce"
+                                    color="white"
+                                    w="100%"
+                                    p={3}
+                                    borderRadius="md"
+                                    _hover={{
+                                        bg: '#2b6cb0',
+                                        transform: 'translateY(-2px)'
+                                    }}
+                                    boxShadow="0 2px 4px rgba(0, 0, 0, 0.1)"
+                                >
+                                    更新
+                                </Button>
                             </form>
                         ) : (
                             <p>ユーザー情報を読み込んでいます...</p>

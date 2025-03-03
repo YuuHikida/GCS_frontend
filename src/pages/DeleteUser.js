@@ -1,5 +1,6 @@
 import React from 'react';
 import { toast } from 'react-toastify';
+import { Button } from "@chakra-ui/react";
 
 const DeleteUser = ({ user }) => {
     const handleDeleteUser = async () => {
@@ -34,7 +35,21 @@ const DeleteUser = ({ user }) => {
         <div>
             <h2>ユーザー削除</h2>
             <p>このアカウントを削除しますか？</p>
-            <button onClick={handleDeleteUser}>削除</button>
+            <Button
+                onClick={handleDeleteUser}
+                bg="red.500"
+                color="white"
+                w="100%"
+                p={3}
+                borderRadius="md"
+                _hover={{
+                    bg: 'red.600',
+                    transform: 'translateY(-2px)'
+                }}
+                boxShadow="0 2px 4px rgba(0, 0, 0, 0.1)"
+            >
+                削除
+            </Button>
         </div>
     );
 };
