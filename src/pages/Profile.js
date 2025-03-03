@@ -4,6 +4,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './Profile.css';
 import SuccessPopup from '../components/SuccessPopup';
+import DeleteUser from './DeleteUser';
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 
 function Profile() {
     const auth = getAuth();
@@ -124,72 +126,86 @@ function Profile() {
 
     return (
         <div className="profile-container">
-            <h1>プロフィール編集</h1>
-            {error && <p className="error">{typeof error === 'string' ? error : 'エラーが発生しました'}</p>}
-            {userInfo ? (
-                <form onSubmit={handleSubmit}>
-                    <div className="info-item">
-                        <label>通知メール:</label>
-                        <input
-                            type="email"
-                            name="notificationEmail"
-                            value={formData.notificationEmail}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div className="info-item">
-                        <label>GitHubユーザー名:</label>
-                        <input
-                            type="text"
-                            name="gitName"
-                            value={formData.gitName}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div className="info-item">
-                        <label>通知時間:</label>
-                        <div style={{ display: 'flex', gap: '10px' }}>
-                            <select
-                                name="notificationHour"
-                                value={formData.notificationTime.split(':')[0]}
-                                onChange={handleTimeChange}
-                            >
-                                {Array.from({ length: 24 }, (_, hour) => (
-                                    <option key={hour} value={String(hour).padStart(2, '0')}>
-                                        {String(hour).padStart(2, '0')}
-                                    </option>
-                                ))}
-                            </select>
-                            <select
-                                name="notificationMinute"
-                                value={formData.notificationTime.split(':')[1]}
-                                onChange={handleTimeChange}
-                            >
-                                {['00', '15', '30', '45'].map(minute => (
-                                    <option key={minute} value={minute}>
-                                        {minute}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
+            <h1>プロフィール管理</h1>
+            <Tabs>
+                <TabList>
+                    <Tab>ユーザー編集</Tab>
+                    <Tab>ユーザー削除</Tab>
+                </TabList>
 
-                    {userInfo.photoURL && (
-                        <div className="profile-photo">
-                            <img src={userInfo.photoURL} alt="プロフィール写真" />
-                        </div>
-                    )}
-                    <button type="submit">更新</button>
-                </form>
-            ) : (
-                <p>ユーザー情報を読み込んでいます...</p>
-            )}
-            <SuccessPopup
-                isOpen={showSuccessPopup}
-                onClose={handlePopupClose}
-                message="更新完了しました"
-            />
-            <ToastContainer />
+                <TabPanels>
+                    <TabPanel>
+                        {error && <p className="error">{typeof error === 'string' ? error : 'エラーが発生しました'}</p>}
+                        {userInfo ? (
+                            <form onSubmit={handleSubmit}>
+                                <div className="info-item">
+                                    <label>通知メール:</label>
+                                    <input
+                                        type="email"
+                                        name="notificationEmail"
+                                        value={formData.notificationEmail}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="info-item">
+                                    <label>GitHubユーザー名:</label>
+                                    <input
+                                        type="text"
+                                        name="gitName"
+                                        value={formData.gitName}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="info-item">
+                                    <label>通知時間:</label>
+                                    <div style={{ display: 'flex', gap: '10px' }}>
+                                        <select
+                                            name="notificationHour"
+                                            value={formData.notificationTime.split(':')[0]}
+                                            onChange={handleTimeChange}
+                                        >
+                                            {Array.from({ length: 24 }, (_, hour) => (
+                                                <option key={hour} value={String(hour).padStart(2, '0')}>
+                                                    {String(hour).padStart(2, '0')}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <select
+                                            name="notificationMinute"
+                                            value={formData.notificationTime.split(':')[1]}
+                                            onChange={handleTimeChange}
+                                        >
+                                            {['00', '15', '30', '45'].map(minute => (
+                                                <option key={minute} value={minute}>
+                                                    {minute}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                {userInfo.photoURL && (
+                                    <div className="profile-photo">
+                                        <img src={userInfo.photoURL} alt="プロフィール写真" />
+                                    </div>
+                                )}
+                                <button type="submit">更新</button>
+                            </form>
+                        ) : (
+                            <p>ユーザー情報を読み込んでいます...</p>
+                        )}
+                        <SuccessPopup
+                            isOpen={showSuccessPopup}
+                            onClose={handlePopupClose}
+                            message="更新完了しました"
+                        />
+                        <ToastContainer />
+                    </TabPanel>
+                    <TabPanel>
+                        <DeleteUser user={user} />
+                    </TabPanel>
+                </TabPanels>
+            </Tabs>
         </div>
     );
 }

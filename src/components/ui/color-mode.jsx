@@ -1,10 +1,24 @@
 'use client'
 
-import { ClientOnly, IconButton, Skeleton, Span } from '@chakra-ui/react'
+import { IconButton, Skeleton, Box } from '@chakra-ui/react'
 import { ThemeProvider, useTheme } from 'next-themes'
-
 import * as React from 'react'
 import { LuMoon, LuSun } from 'react-icons/lu'
+
+// ClientOnlyコンポーネントを作成
+const ClientOnly = ({ children, fallback = null }) => {
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return fallback
+  }
+
+  return children
+}
 
 export function ColorModeProvider(props) {
   return (
@@ -46,12 +60,6 @@ export const ColorModeButton = React.forwardRef(
           size='sm'
           ref={ref}
           {...props}
-          css={{
-            _icon: {
-              width: '5',
-              height: '5',
-            },
-          }}
         >
           <ColorModeIcon />
         </IconButton>
@@ -62,28 +70,12 @@ export const ColorModeButton = React.forwardRef(
 
 export const LightMode = React.forwardRef(function LightMode(props, ref) {
   return (
-    <Span
-      color='fg'
-      display='contents'
-      className='chakra-theme light'
-      colorPalette='gray'
-      colorScheme='light'
-      ref={ref}
-      {...props}
-    />
+    <Box as="span" color='fg' display='contents' className='chakra-theme light' colorPalette='gray' colorScheme='light' ref={ref} {...props} />
   )
 })
 
 export const DarkMode = React.forwardRef(function DarkMode(props, ref) {
   return (
-    <Span
-      color='fg'
-      display='contents'
-      className='chakra-theme dark'
-      colorPalette='gray'
-      colorScheme='dark'
-      ref={ref}
-      {...props}
-    />
+    <Box as="span" color='fg' display='contents' className='chakra-theme dark' colorPalette='gray' colorScheme='dark' ref={ref} {...props} />
   )
 })

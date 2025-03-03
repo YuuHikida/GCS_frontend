@@ -3,11 +3,7 @@ import { LuFolder, LuSquareCheck, LuUser } from "react-icons/lu"
 
 const Demo = () => {
   return (
-    <Tabs.Root defaultValue="members"css={{
-        background: "transparent !important",
-        boxShadow: "none !important",
-        border: "none !important",
-      }}>
+    <Tabs.Root defaultValue="members">
       <Tabs.List>
         <Tabs.Trigger value="members">
           <LuUser />
