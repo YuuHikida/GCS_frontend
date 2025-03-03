@@ -1,0 +1,13 @@
+/* src/pages/test.module.css */
+.resetAll {
+    all: unset; /* すべてのスタイルをリセット */
+}
+
+/* 必要に応じて、タブのスタイルを追加 */
+.chakraTabsTrigger {
+    /* Chakra UIのスタイルを適用 */
+    background-color: initial; /* デフォルトの背景色 */
+    color: initial; /* デフォルトのテキスト色 */
+    border: initial; /* デフォルトのボーダー */
+    box-shadow: initial; /* デフォルトのボックスシャドウ */
+}

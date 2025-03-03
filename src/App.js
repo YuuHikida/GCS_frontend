@@ -2,13 +2,14 @@ import './App.css';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { PrivateRoute } from './components/PrivateRoute';
-import Login from './pages/login';
+
 import Register from './pages/register';
 import Dashboard from './pages/dashboard';
 import Header from './components/Header';
 import Welcome from './pages/Welcome';
 import About from './pages/About';
 import Profile from './pages/Profile';
+import Demo from './pages/test';
 
 /**
  * アプリケーションのメインコンポーネント
@@ -27,6 +28,7 @@ function App() {
     return (
         <Routes>
             <Route path="/" element={<Welcome />} />
+            <Route path="/test" element={<Demo />} />
             <Route path="/register" element={<Header disableAuthButtons={true}><Register /></Header>} />
             <Route path="/dashboard" element={
                 <PrivateRoute>

@@ -7,19 +7,21 @@ import { AuthProvider } from './context/AuthContext';
 import reportWebVitals from './reportWebVitals';
 // chakra-Ui
 import { Provider } from'./components/ui/provider';
-
+import theme from './theme';
+import CustomGlobalStyle from './style/global.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <Provider>
+
+    <Provider theme={theme}>
+      <CustomGlobalStyle />
       <BrowserRouter>
         <AuthProvider>
           <App />
         </AuthProvider>
       </BrowserRouter>
     </Provider>
-  </React.StrictMode>
+
 );
 
 // If you want to start measuring performance in your app, pass a function

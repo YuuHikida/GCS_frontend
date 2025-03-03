@@ -86,3 +86,10 @@ button:hover {
     text-align: center;
     margin-bottom: 15px;
 } 
+
+.profile-container .chakra-tabs__trigger {
+    background-color: transparent !important; /* 背景色を透明に */
+    color: inherit !important; /* テキスト色を親要素から継承 */
+    border: none !important; /* ボーダーを削除 */
+    box-shadow: none !important; /* ボックスシャドウを削除 */
+}
