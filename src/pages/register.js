@@ -242,7 +242,17 @@ function Register() {
                                     <AccordionRoot allowToggle>
                                         <AccordionItem>
                                             <AccordionItemTrigger>
-                                                Gitユーザー名とは？
+                                                <Text
+                                                    display="block !important"
+                                                    visibility="visible !important"
+                                                    position="relative"
+                                                    zIndex="1"
+                                                    color="black !important"
+                                                    fontSize="md"
+                                                    fontWeight="normal"
+                                                >
+                                                    Gitユーザー名とは？
+                                                </Text>
                                             </AccordionItemTrigger>
                                             <AccordionItemContent>
                                                 <VStack align="start" spacing={2}>

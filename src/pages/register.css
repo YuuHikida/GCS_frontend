@@ -59,7 +59,8 @@ body {
     box-shadow: 0 0 0 1px #3182ce;
 }
 
-.chakra-button {
+/* 送信ボタン専用のスタイル */
+form .chakra-button[type="submit"] {
     background-color: #3182ce;
     color: white;
     padding: 12px 24px;
@@ -70,7 +71,33 @@ body {
     margin: 30px auto;
 }
 
-.chakra-button:hover {
+form .chakra-button[type="submit"]:hover {
     background-color: #2b6cb0;
     transform: translateY(-2px);
+}
+
+/* アコーディオンボタンのリセット */
+.chakra-accordion__button {
+    background: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    color: inherit !important;
+    display: flex !important;
+    width: 100% !important;
+    padding: 1rem !important;
+    align-items: center !important;
+    cursor: pointer !important;
+}
+
+.chakra-accordion__button:hover {
+    background-color: #f5f5f5 !important;
+    transform: none !important;
+}
+
+.force-visible {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    color: inherit !important;
 }
