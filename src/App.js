@@ -1,7 +1,7 @@
 import './App.css';
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
-import { PrivateRoute } from './components/PrivateRoute';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import { useAuth } from './context/AuthContext';
 
 import Register from './pages/register';
 import Dashboard from './pages/dashboard';
@@ -12,39 +12,75 @@ import Profile from './pages/Profile';
 import Demo from './pages/test';
 
 /**
- * アプリケーションのメインコンポーネント
- * ルーティング設定を管理し、各ページへの遷移を制御
- * 
- * ルーティング構成:
- * / -> ウェルカムページ（未認証可）
- * /register -> 新規登録ページ（未認証可）
- * /login -> ログインページ（PrivateRoute保護）
- * /dashboard -> ダッシュボード（PrivateRoute保護）
- * /about -> サイト説明（PrivateRoute保護）
- * /profile -> プロフィールページ（PrivateRoute保護）
+ * 認証が必要なルートを保護するコンポーネント
+ * user が null の場合は Welcome ページにリダイレクト
  */
+const PrivateRoute = ({ children }) => {
+    const { user, loading } = useAuth();
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    // 未認証ユーザーは Welcome ページへリダイレクト
+    if (!user) {
+        return <Navigate to="/" />;
+    }
+
+    return children;
+};
+
+/**
+ * アプリケーションのメインコンポーネント
+ * ルーティング構成:
+ * / -> Welcome（未認証可）
+ * 以下は全て認証必須:
+ * /register -> 新規ユーザー登録
+ * /dashboard -> メインダッシュボード
+ * /about -> サービス説明
+ * /profile -> ユーザープロフィール
+ */
 function App() {
     return (
         <Routes>
+            {/* 未認証でもアクセス可能なルート */}
             <Route path="/" element={<Welcome />} />
-            <Route path="/test" element={<Demo />} />
-            <Route path="/register" element={<Header disableAuthButtons={true}><Register /></Header>} />
+
+            {/* === 以下、全て認証必須のルート === */}
+            <Route path="/register" element={
+                <PrivateRoute>
+                    <Header disableAuthButtons={true}>
+                        <Register />
+                    </Header>
+                </PrivateRoute>
+            } />
+
             <Route path="/dashboard" element={
                 <PrivateRoute>
-                    <Header><Dashboard /></Header>
+                    <Header>
+                        <Dashboard />
+                    </Header>
                 </PrivateRoute>
             } />
+
             <Route path="/about" element={
                 <PrivateRoute>
-                    <Header><About /></Header>
+                    <Header>
+                        <About />
+                    </Header>
                 </PrivateRoute>
             } />
+
             <Route path="/profile" element={
                 <PrivateRoute>
-                    <Header><Profile /></Header>
+                    <Header>
+                        <Profile />
+                    </Header>
                 </PrivateRoute>
             } />
+
+            {/* 不明なパスは Welcome ページにリダイレクト */}
+            <Route path="*" element={<Navigate to="/" />} />
         </Routes>
     );
 }

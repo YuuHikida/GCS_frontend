@@ -24,59 +24,48 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 // カスタムフック: 認証状態の管理と認証関連の機能を提供
 export const useAuth = () => {
-  // ユーザー情報の状態管理
   const [user, setUser] = useState(null);
-  // ローディング状態の管理
   const [loading, setLoading] = useState(true);
-  // 新規登録用のデータを保持するstate
   const [registrationData, setRegistrationData] = useState(null);
 
-  // Googleログイン処理を行う関数
   const login = async () => {
     try {
-      // Firebase認証インスタンスとGoogleプロバイダーを取得
       const auth = getAuth();
       const provider = new GoogleAuthProvider();
-      // Googleログインポップアップを表示し、認証結果を取得
       const result = await signInWithPopup(auth, provider);
+      const firebaseToken = await result.user.getIdToken();
       
-      // Firebase認証トークンを取得
-      const token = await result.user.getIdToken();
-      
-      // URLを環境変数を使用して構築
+      // バックエンドでトークン検証
       const response = await fetch(`${API_BASE_URL}/api/auth/verify-token`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${firebaseToken}`,
           'Content-Type': 'application/json'
         }
       });
       
-      // バックエンドからのレスポンスをJSONとして解析
-      const userData = await response.json();
+      const verifyResult = await response.json();
       
-      // ユーザー情報をステートに保存
-      setUser(userData.user);
-      
-      // 新規ユーザーの場合、登録用データを保存
-      if (userData.isNewUser) {
-        setRegistrationData({
-          email: userData.user.email,
-          name: userData.user.name,
-          googleId: userData.user.googleId,
-          // 他の必要なデータ
-        });
+      // 検証済みトークンをsessionStorageに保存
+      if (verifyResult.success) {
+        sessionStorage.setItem('authToken', verifyResult.token);
+        
+        // 新規ユーザーかどうかの判定結果を返す
+        return {
+          success: true,
+          needsRegistration: verifyResult.needsRegistration,
+          token: verifyResult.token
+        };
+      } else {
+        // 検証失敗
+        return {
+          success: false,
+          error: verifyResult.error || '認証に失敗しました'
+        };
       }
-      
-      // ログイン結果を返す
-      return {
-        success: true,
-        isNewUser: userData.isNewUser,
-        user: userData.user
-      };
-
     } catch (error) {
       console.error('Login error:', error);
+      sessionStorage.removeItem('authToken');
       return {
         success: false,
         error: error.message
@@ -84,47 +73,47 @@ export const useAuth = () => {
     }
   };
 
-  // Firebase認証状態の監視を設定
-  
+  // 認証ヘッダーを取得するユーティリティ関数
+  const getAuthHeaders = () => {
+    const token = sessionStorage.getItem('authToken');
+    return {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+  };
+
   useEffect(() => {
-    // ユーザーの認証状態が変更されたときに呼び出される関数
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        // ユーザーが認証されている場合
-        const token = await firebaseUser.getIdToken();
         try {
-          // ここも同様に環境変数を使用
+          const token = await firebaseUser.getIdToken();
+          sessionStorage.setItem('authToken', token);
+          
           const response = await fetch(`${API_BASE_URL}/api/auth/verify-token`, {
             method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
+            headers: getAuthHeaders()
           });
+          
           const userData = await response.json();
           setUser(userData.user);
         } catch (error) {
-          console.error('ユーザー認証エラー:', error);
+          console.error('認証エラー:', error);
+          sessionStorage.removeItem('authToken');
         }
       } else {
-        // ユーザーが認証されていない場合
         setUser(null);
+        sessionStorage.removeItem('authToken');
       }
-      // ローディング状態を解除
       setLoading(false);
     });
 
-    // コンポーネントのアンマウント時にリスナーを解除
     return () => unsubscribe();
   }, []);
 
-  // ログアウト処理を行う関数
   const logout = async () => {
-    const auth = getAuth();
     try {
-      // Firebaseからログアウト
-      await auth.signOut();
-      // ユーザー情報をクリア
+      await signOut(auth);
+      sessionStorage.removeItem('authToken');
       setUser(null);
       return { success: true };
     } catch (error) {
@@ -133,13 +122,13 @@ export const useAuth = () => {
     }
   };
 
-  // フックから必要な値と関数を返す
   return {
-    user,      // ユーザー情報
-    loading,   // ローディング状態
-    login,     // ログイン関数
-    logout,    // ログアウト関数
-    registrationData,  // 新規登録用データを追加
-    setRegistrationData  // 必要に応じてセッター関数も公開
+    user,
+    loading,
+    login,
+    logout,
+    registrationData,
+    setRegistrationData,
+    getAuthHeaders  // 新しく追加
   };
 };

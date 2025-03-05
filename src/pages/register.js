@@ -34,7 +34,7 @@ import {
 */
 
 function Register() {
-    const { user, completeRegistration } = useAuth();
+    const { user, getAuthHeaders } = useAuth();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         notificationEmail: user?.email || '',
@@ -74,11 +74,8 @@ function Register() {
         try {
             const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/auth/register`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: getAuthHeaders(),
                 body: JSON.stringify({
-                    googleId: user.uid,
                     notificationEmail: formData.notificationEmail,
                     gitName: formData.gitName,
                     time: formData.time
@@ -88,9 +85,11 @@ function Register() {
             const data = await response.json();
             
             if (data.success) {
-                handleRegistrationComplete();
+                setShowSuccessPopup(true);
+                setTimeout(() => {
+                    navigate('/dashboard');
+                }, 2000);
             } else {
-                // エラーメッセージをポップアップで表示
                 if (data.errors) {
                     Object.values(data.errors).forEach(error => {
                         toast.error(error);
@@ -127,8 +126,6 @@ function Register() {
     };
 
     const handleRegistrationComplete = () => {
-        //localStorageに登録完了フラグをセット(これ無いとダッシュボードに遷移しない)
-        localStorage.setItem(`registered_${user.uid}`, 'true');
         setShowSuccessPopup(true);
     };
 

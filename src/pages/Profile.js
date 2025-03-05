@@ -24,6 +24,7 @@ function Profile() {
             if (user) {
                 try {
                     const idToken = await user.getIdToken();
+                    console.log("★idToken",idToken);
                     const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/user/info`, {
                         method: 'POST',
                         headers: {

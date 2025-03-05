@@ -11,6 +11,8 @@ function Welcome() {
         try {
             const result = await loginWithGoogle();
             const idToken = await result.getIdToken();
+            
+            // バックエンドでトークン検証
             const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/auth/verify-token`, {
                 method: 'POST',
                 headers: {
@@ -19,12 +21,19 @@ function Welcome() {
             });
 
             const data = await response.json();
+            
             if (data.success) {
-                if (data.isNewUser) {
+                // トークンをsessionStorageに保存
+                sessionStorage.setItem('authToken', idToken);
+                
+                // 新規ユーザーか既存ユーザーかで遷移先を分岐
+                if (data.needsRegistration) {
                     navigate('/register');
                 } else {
                     navigate('/dashboard');
                 }
+            } else {
+                console.error("認証エラー:", data.error);
             }
         } catch (error) {
             console.error("ログインエラー:", error);
