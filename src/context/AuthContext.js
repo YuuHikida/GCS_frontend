@@ -45,10 +45,10 @@ export function AuthProvider({ children }) {
             if (!localStorage.getItem(`registered_${result.user.uid}`)) {
                 localStorage.setItem('registration_pending', 'true');
             }
-            console.log("★user =", result.user);
+ 
             return result.user;
         } catch (error) {
-            console.error("Google login failed:", error);
+
             throw error;
         }
     };

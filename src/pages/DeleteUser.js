@@ -17,7 +17,7 @@ const DeleteUser = ({ user }) => {
                 });
 
                 const data = await response.json();
-
+                console.log("★data",data);
                 if (data.success) {
                     toast.success("ユーザーが削除されました。");
                     // 必要に応じて、ログアウトやリダイレクト処理を追加
