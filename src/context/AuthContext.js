@@ -14,7 +14,8 @@ const AuthContext = createContext();
  * useAuthを呼ぶことで認証状態を取得できる=(AuthContextの値を取得できる)
  */
 export const useAuth = () => useContext(AuthContext);
-
+// バックエンドのベースURLを環境変数から取得
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 /**
  * 認証状態を提供するプロバイダーコンポーネント
  * 
@@ -50,6 +51,25 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const registerUser = async (temporaryToken, userData) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${temporaryToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            });
+
+            const result = await response.json();
+            return result;
+        } catch (error) {
+            console.error('登録エラー:', error);
+            return { success: false, error: error.message };
+        }
+    };
+
     const getAuthHeaders = () => {
         return {
             'Authorization': `Bearer ${sessionStorage.getItem('authToken')}`,
@@ -73,6 +93,7 @@ export const AuthProvider = ({ children }) => {
         loading,
         loginWithGoogle,
         logout,
+        registerUser,
         getAuthHeaders
     };
 
