@@ -46,18 +46,24 @@ export const useAuth = () => {
       
       const verifyResult = await response.json();
       
-      // 検証済みトークンをsessionStorageに保存
       if (verifyResult.success) {
-        sessionStorage.setItem('authToken', verifyResult.token);
-        
-        // 新規ユーザーかどうかの判定結果を返す
-        return {
-          success: true,
-          needsRegistration: verifyResult.needsRegistration,
-          token: verifyResult.token
-        };
+        // 新規ユーザーの場合はトークンを一時的に保持
+        if (verifyResult.needsRegistration) {
+          return {
+            success: true,
+            needsRegistration: true,
+            temporaryToken: firebaseToken
+          };
+        } else {
+          // 既存ユーザーの場合のみ sessionStorage に保存
+          sessionStorage.setItem('authToken', firebaseToken);
+          return {
+            success: true,
+            needsRegistration: false,
+            token: firebaseToken
+          };
+        }
       } else {
-        // 検証失敗
         return {
           success: false,
           error: verifyResult.error || '認証に失敗しました'
@@ -65,7 +71,6 @@ export const useAuth = () => {
       }
     } catch (error) {
       console.error('Login error:', error);
-      sessionStorage.removeItem('authToken');
       return {
         success: false,
         error: error.message

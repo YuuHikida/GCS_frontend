@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, Input, Stack, Box, HStack, VStack, Text, FormControl, FormLabel, FormHelperText, Heading } from "@chakra-ui/react";
 import { Field } from "../components/ui/field";
 import {
@@ -34,8 +34,11 @@ import {
 */
 
 function Register() {
-    const { user, getAuthHeaders } = useAuth();
+    const { user, registerUser } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+    const temporaryToken = location.state?.temporaryToken;
+
     const [formData, setFormData] = useState({
         notificationEmail: user?.email || '',
         gitName: '',
@@ -72,30 +75,26 @@ function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/auth/register`, {
-                method: 'POST',
-                headers: getAuthHeaders(),
-                body: JSON.stringify({
-                    notificationEmail: formData.notificationEmail,
-                    gitName: formData.gitName,
-                    time: formData.time
-                }),
+            const result = await registerUser(temporaryToken, {
+                notificationEmail: formData.notificationEmail,
+                gitName: formData.gitName,
+                time: formData.time
             });
 
-            const data = await response.json();
-            
-            if (data.success) {
+            if (result.success) {
+                // 登録成功時にトークンを保存
+                sessionStorage.setItem('authToken', temporaryToken);
                 setShowSuccessPopup(true);
                 setTimeout(() => {
                     navigate('/dashboard');
                 }, 2000);
             } else {
-                if (data.errors) {
-                    Object.values(data.errors).forEach(error => {
+                if (result.errors) {
+                    Object.values(result.errors).forEach(error => {
                         toast.error(error);
                     });
                 }
-                setErrors(data.errors || {});
+                setErrors(result.errors || {});
             }
         } catch (error) {
             console.error("登録エラー:", error);
