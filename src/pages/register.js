@@ -36,9 +36,10 @@ import {
 function Register() {
     const { user, registerUser } = useAuth();
     const navigate = useNavigate();
+    //Welcome.jsから渡されたtemporaryTokenを取得
     const location = useLocation();
     const temporaryToken = location.state?.temporaryToken;
-
+    console.log('Temporary Token:', temporaryToken);
     const [formData, setFormData] = useState({
         notificationEmail: user?.email || '',
         gitName: '',

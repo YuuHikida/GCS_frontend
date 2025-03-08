@@ -23,13 +23,12 @@ function Welcome() {
             const data = await response.json();
             
             if (data.success) {
-                // トークンをsessionStorageに保存
-                sessionStorage.setItem('authToken', idToken);
-                
-                // 新規ユーザーか既存ユーザーかで遷移先を分岐
                 if (data.needsRegistration) {
-                    navigate('/register');
+                    // stateオプションを使用して、temporaryTokenという名前でidTokenを/registerページに渡す
+                    navigate('/register', { state: { temporaryToken: idToken } });
                 } else {
+                    // 既存ユーザーの場合のみトークンを保存
+                    sessionStorage.setItem('authToken', idToken);
                     navigate('/dashboard');
                 }
             } else {
