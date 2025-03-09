@@ -101,3 +101,13 @@ form .chakra-button[type="submit"]:hover {
     width: 100% !important;
     color: inherit !important;
 }
+
+.container {
+    margin-top: 70px; /* ヘッダーの高さ分の余白を追加 */
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin-top: 300px; /* 小さい画面用の余白を調整 */
+    }
+}
