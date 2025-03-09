@@ -85,6 +85,7 @@ function Register() {
             if (result.success) {
                 // 登録成功時にトークンを保存
                 sessionStorage.setItem('authToken', temporaryToken);
+                localStorage.setItem(`registered_${user?.uid}`, true);
                 setShowSuccessPopup(true);
                 setTimeout(() => {
                     navigate('/dashboard');
