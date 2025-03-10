@@ -26,12 +26,11 @@ function Profile() {
                     const idToken = await user.getIdToken();
                     console.log("★idToken",idToken);
                     const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/user/info`, {
-                        method: 'POST',
+                        method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${idToken}`
                         },
-                        body: JSON.stringify({ uid: user.uid })
                     });
 
                     if (!response.ok) {
