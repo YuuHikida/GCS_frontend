@@ -95,7 +95,7 @@ function Profile() {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${idToken}`
                 },
-                body: JSON.stringify({ uid: user.uid, ...formData })
+                body: JSON.stringify({ ...formData })
             });
 
             const data = await response.json();
