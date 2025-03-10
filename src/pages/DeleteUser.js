@@ -13,7 +13,6 @@ const DeleteUser = ({ user }) => {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${idToken}`
                     },
-                    body: JSON.stringify({ uid: user.uid })
                 });
 
                 const data = await response.json();
