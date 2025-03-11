@@ -28,7 +28,7 @@ const DeleteUser = ({ user }) => {
                     setShowSuccessPopup(true);
                     setTimeout(() => {
                         navigate('/welcome', { replace: true });
-                    }, 2000);
+                    }, 1800);
                 } else {
                     toast.error(data.message || "ユーザー削除に失敗しました。");
                 }

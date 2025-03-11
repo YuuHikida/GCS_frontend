@@ -9,6 +9,7 @@ import {
 } from "../components/ui/native-select";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import LoginRedirect from '../components/LoginRedirect';
 import SuccessPopup from '../components/SuccessPopup';
 import './register.css';
 
@@ -173,6 +174,7 @@ function Register() {
     // <ToastContainer />このコンポーネントがポップアップ表示管理
     return (
         <Box className="container">
+            <LoginRedirect user={user} />
             <form onSubmit={handleSubmit}>
                 <Box borderWidth="1px" borderRadius="lg" p={6}>
                     <Stack spacing={4}>
