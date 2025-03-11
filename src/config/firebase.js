@@ -79,42 +79,42 @@ export const useAuth = () => {
   };
 
   // 認証ヘッダーを取得するユーティリティ関数
-  const getAuthHeaders = () => {
-    const token = sessionStorage.getItem('authToken');
+  const getAuthHeaders = async () => {
+    const user = auth.currentUser;
+    if (user) {
+      const token = await user.getIdToken();
+      return {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      };
+    }
     return {
-      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     };
   };
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         try {
-          const token = await firebaseUser.getIdToken();
-          sessionStorage.setItem('authToken', token);
-          
+          const headers = await getAuthHeaders();
           const response = await fetch(`${API_BASE_URL}/api/auth/verify-token`, {
             method: 'POST',
-            headers: getAuthHeaders()
+            headers
           });
-          
           const userData = await response.json();
           setUser(userData.user);
         } catch (error) {
           console.error('認証エラー:', error);
-          sessionStorage.removeItem('authToken');
         }
       } else {
         setUser(null);
-        sessionStorage.removeItem('authToken');
       }
       setLoading(false);
     });
-
+  
     return () => unsubscribe();
   }, []);
-
+  
   const logout = async () => {
     try {
       await signOut(auth);

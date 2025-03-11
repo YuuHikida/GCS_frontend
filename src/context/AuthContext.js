@@ -51,31 +51,21 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const registerUser = async (temporaryToken, userData) => {
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${temporaryToken}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(userData)
-            });
-
-            const result = await response.json();
-            return result;
-        } catch (error) {
-            console.error('登録エラー:', error);
-            return { success: false, error: error.message };
-        }
+// getAuthHeadersをgetIdTokenを使って更新
+const getAuthHeaders = async () => {
+    const user = auth.currentUser;
+    if (user) {
+      const token = await user.getIdToken();
+      return {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      };
+    }
+    return {
+      'Content-Type': 'application/json'
     };
-
-    const getAuthHeaders = () => {
-        return {
-            'Authorization': `Bearer ${sessionStorage.getItem('authToken')}`,
-            'Content-Type': 'application/json'
-        };
-    };
+  };
+  
 
     // Firebase認証の状態を監視
     useEffect(() => {
@@ -93,7 +83,6 @@ export const AuthProvider = ({ children }) => {
         loading,
         loginWithGoogle,
         logout,
-        registerUser,
         getAuthHeaders
     };
 

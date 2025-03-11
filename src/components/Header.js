@@ -10,7 +10,7 @@ function Header({ children }) {
     const [activeIndex, setActiveIndex] = useState(null);
 
     // 登録が完了しているかどうかを確認
-    const isRegistered = localStorage.getItem(`isRegistered`);
+    const isRegistered = localStorage.getItem(`isRegistered`)==="true";
 
     const handleLogin = async () => {
         try {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, Input, Stack, Box, HStack, VStack, Text, FormControl, FormLabel, FormHelperText, Heading } from "@chakra-ui/react";
-import { Field } from "../components/ui/field";
+
 import {
   NativeSelectField,
   NativeSelectRoot,
@@ -34,12 +34,10 @@ import {
 */
 
 function Register() {
-    const { user, registerUser } = useAuth();
+    const { user, auth } = useAuth();
     const navigate = useNavigate();
-    //Welcome.jsから渡されたtemporaryTokenを取得
     const location = useLocation();
     const temporaryToken = location.state?.temporaryToken;
-    console.log('Temporary Token:', temporaryToken);
     const [formData, setFormData] = useState({
         notificationEmail: user?.email || '',
         gitName: '',
@@ -73,18 +71,43 @@ function Register() {
         }
     }, [selectedEmailOption, user]);
 
+    const registerUser = async (userData) => {
+        try {
+            if (!user) {
+                toast.error('ユーザーがログインしていません。再ログインしてください。');
+                setTimeout(() => {
+                    navigate('/welcome');
+                }, 2000);
+                return;
+            }
+            const token = await user.getIdToken();
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            });
+
+            const result = await response.json();
+            return result;
+        } catch (error) {
+            console.error('登録エラー:', error);
+            return { success: false, error: error.message };
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const result = await registerUser(temporaryToken, {
+            const result = await registerUser({
                 notificationEmail: formData.notificationEmail,
                 gitName: formData.gitName,
                 time: formData.time
             });
 
             if (result.success) {
-                // 登録成功時にトークンを保存
-                sessionStorage.setItem('authToken', temporaryToken);
                 localStorage.setItem(`isRegistered`, true);
                 setShowSuccessPopup(true);
                 setTimeout(() => {
