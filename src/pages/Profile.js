@@ -125,9 +125,10 @@ function Profile() {
     };
 
     return (
-        <div className="profile-container">
-            <h1>プロフィール管理</h1>
-            <Tabs>
+        <div className="paddingTop-container">
+            <div className="profile-container">
+                <h1>プロフィール管理</h1>
+                <Tabs>
                 <TabList>
                     <Tab>ユーザー編集</Tab>
                     <Tab>ユーザー削除</Tab>
@@ -212,6 +213,7 @@ function Profile() {
                             isOpen={showSuccessPopup}
                             onClose={handlePopupClose}
                             message="更新完了しました"
+                            redirectPath="/profile"
                         />
                         <ToastContainer />
                     </TabPanel>
@@ -220,6 +222,7 @@ function Profile() {
                     </TabPanel>
                 </TabPanels>
             </Tabs>
+        </div>
         </div>
     );
 }

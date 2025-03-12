@@ -16,6 +16,12 @@ const CustomGlobalStyle = () => (
         color: inherit;                    /* テキスト色はそのまま */
       }
 
+      @media (max-width: 768px) {
+              body {
+                padding-top:220px; /* 小さい画面用の余白を調整 */
+              }
+            }
+
       [data-scope="tabs"] [data-part="trigger"][data-selected] {
         border-bottom: 2px solid #3182ce !important; /* 選択状態のスタイルだけ再適用 */
         font-weight: bold;                          /* アクティブ時の太字 */
