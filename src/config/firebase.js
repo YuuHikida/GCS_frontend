@@ -55,8 +55,6 @@ export const useAuth = () => {
             temporaryToken: firebaseToken
           };
         } else {
-          // 既存ユーザーの場合のみ sessionStorage に保存
-          sessionStorage.setItem('authToken', firebaseToken);
           return {
             success: true,
             needsRegistration: false,
@@ -114,7 +112,7 @@ export const useAuth = () => {
   
     return () => unsubscribe();
   }, []);
-  
+
   const logout = async () => {
     try {
       await signOut(auth);

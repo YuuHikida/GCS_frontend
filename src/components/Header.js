@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './Header.css';
 import { FaHome, FaInfoCircle, FaUser, FaSignOutAlt, FaTrophy } from 'react-icons/fa';
 
 function Header({ children }) {
     const { user, loginWithGoogle, logout } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation(); // 現在のパスを取得
+    // register.jsが表示されている場合はナビバーを無効化
+    const isRegisterPage = location.pathname === '/register';
     const [activeIndex, setActiveIndex] = useState(null);
-
-    // 登録が完了しているかどうかを確認
-    const isRegistered = localStorage.getItem(`isRegistered`)==="true";
 
     const handleLogin = async () => {
         try {
@@ -49,7 +49,7 @@ function Header({ children }) {
         setActiveIndex(index);
 
         // 登録が完了していない場合をチェック
-        if (!isRegistered) {
+        if (isRegisterPage) {
             alert('登録を完了すると、これらの機能にアクセスできるようになります。\n登録を完了してください。');
             return;
         }
@@ -90,15 +90,17 @@ function Header({ children }) {
                         key={index}
                         href={item.path}
                         className={`nav-item ${activeIndex === index ? 'active' : ''} ${
-                            !isRegistered ? 'disabled' : ''
+                            isRegisterPage ? 'disabled' : ''
                         }`}
                         onClick={(e) => {
                             e.preventDefault();
-                            handleClick(index);
+                            if (!isRegisterPage) {
+                                handleClick(index);
+                            }
                         }}
                         style={{
-                            pointerEvents: !isRegistered ? 'none' : 'auto',
-                            opacity: !isRegistered ? 0.5 : 1
+                            pointerEvents: isRegisterPage ? 'none' : 'auto',
+                            opacity: isRegisterPage ? 0.5 : 1
                         }}
                     >
                         {item.icon}

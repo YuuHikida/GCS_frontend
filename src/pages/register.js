@@ -109,7 +109,6 @@ function Register() {
             });
 
             if (result.success) {
-                localStorage.setItem(`isRegistered`, true);
                 setShowSuccessPopup(true);
                 setTimeout(() => {
                     navigate('/dashboard');

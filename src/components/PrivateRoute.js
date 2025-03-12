@@ -1,5 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useEffect, useState } from 'react';
 
 /**
  * 認証が必要なルートを保護するコンポーネント
@@ -13,20 +14,29 @@ import { useAuth } from '../context/AuthContext';
  */
 export function PrivateRoute({ children }) {
     const { user, loading } = useAuth();
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            if (user) {
+                try {
+                    await user.getIdToken();
+                    setIsAuthenticated(true);
+                } catch (error) {
+                    setIsAuthenticated(false);
+                }
+            } else {
+                setIsAuthenticated(false);
+            }
+        };
+        checkAuth();
+    }, [user]);
 
     if (loading) {
         return <div>Loading...</div>;
     }
 
-    if (!user) {
-        return <Navigate to="/" />;
-    }
-
-    // 登録が完了していない場合
-    const isRegistered = localStorage.getItem(`registered_${user.uid}`);
-    const registrationPending = localStorage.getItem('registration_pending');
-    
-    if (!isRegistered && registrationPending) {
+    if (!isAuthenticated) {
         return <Navigate to="/register" />;
     }
 
