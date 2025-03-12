@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import SuccessPopup from './SuccessPopup'; // SuccessPopupをインポート
+import SuccessPopup from './DisplayPopup'; // SuccessPopupをインポート
 
 function LoginRedirect({ user, message = 'ユーザーがログインしていません。再ログインしてください。', redirectPath = '/welcome' }) {
     const navigate = useNavigate();

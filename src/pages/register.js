@@ -10,7 +10,7 @@ import {
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoginRedirect from '../components/LoginRedirect';
-import SuccessPopup from '../components/SuccessPopup';
+import DisplayPopup from '../components/DisplayPopup';
 import './register.css';
 
 import {
@@ -337,10 +337,11 @@ function Register() {
                 </Box>
             </form>
             
-            <SuccessPopup
+            <DisplayPopup
                 isOpen={showSuccessPopup}
                 onClose={handlePopupClose}
                 message="登録が完了しました"
+                redirectPath="/dashboard"
             />
             
             <ToastContainer />

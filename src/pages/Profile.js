@@ -3,7 +3,7 @@ import { getAuth } from "firebase/auth";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './Profile.css';
-import SuccessPopup from '../components/SuccessPopup';
+import SuccessPopup from '../components/DisplayPopup';
 import DeleteUser from './DeleteUser';
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Button } from "@chakra-ui/react";
 

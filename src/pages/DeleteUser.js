@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { Button } from "@chakra-ui/react";
 import { useNavigate } from 'react-router-dom';
-import SuccessPopup from '../components/SuccessPopup';
+import DisplayPopup from '../components/DisplayPopup';
 
 const DeleteUser = ({ user }) => {
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
@@ -24,11 +24,7 @@ const DeleteUser = ({ user }) => {
                 console.log("★data", data);
                 if (data.success) {
                     toast.success("ユーザーが削除されました。");
-                    localStorage.setItem(`isRegistered`, false);
                     setShowSuccessPopup(true);
-                    setTimeout(() => {
-                        navigate('/welcome', { replace: true });
-                    }, 1800);
                 } else {
                     toast.error(data.message || "ユーザー削除に失敗しました。");
                 }
@@ -58,10 +54,11 @@ const DeleteUser = ({ user }) => {
             >
                 削除
             </Button>
-            <SuccessPopup
+            <DisplayPopup
                 isOpen={showSuccessPopup}
                 onClose={() => setShowSuccessPopup(false)}
                 message="削除完了しました"
+                redirectPath="/welcome"
             />
         </div>
     );
