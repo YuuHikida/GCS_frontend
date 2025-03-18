@@ -60,12 +60,13 @@ function Dashboard() {
 
     // 今日のコミットの有無を表示するスタイル
     const commitStatusStyle = {
-        padding: '10px',
-        borderRadius: '5px',
+        padding: '20px',
+        borderRadius: '10px',
         backgroundColor: isCommitToday ? '#4CAF50' : '#F44336',
         color: 'white',
         textAlign: 'center',
         marginBottom: '20px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     };
 
     // 1週間のコミット履歴を表示するスタイル
@@ -78,12 +79,13 @@ function Dashboard() {
 
     // アニメーション用のスタイル
     const animatedStyle = (index) => ({
-        width: '30px',
-        height: '30px',
+        width: '40px',
+        height: '40px',
         backgroundColor: '#E0E0E0',
-        borderRadius: '3px',
+        borderRadius: '5px',
         margin: '0 5px',
         animation: weeklyCommitRate[index] ? `lightUp 1s forwards ${index * 0.5}s` : 'none',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
     });
 
     // 日付を計算
@@ -97,11 +99,11 @@ function Dashboard() {
     });
 
     return (
-        <div className="dashboard-container" style={{ display: 'flex', justifyContent: 'space-between', padding: '20px' }}>
+        <div className="dashboard-container" style={{ display: 'flex', justifyContent: 'space-between', padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '10px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)', maxWidth: '1200px', margin: 'auto' }}>
             <div style={{ flex: 1, marginRight: '20px' }}>
-            <h2 style={{ textAlign: 'center', marginBottom: '10px', fontWeight: 'bold', color: '#333' }}>今日のコミット</h2>
+                <h2 style={{ textAlign: 'center', marginBottom: '10px', fontWeight: 'bold', color: '#333' }}>今日のコミット</h2>
                 <div style={commitStatusStyle}>
-                    <h2>今日のコミット: {isCommitToday ? 'あり' : 'なし'}</h2>
+                    <h2>{isCommitToday ? 'あり' : 'なし'}</h2>
                 </div>
                 <h3 style={{ textAlign: 'center', marginBottom: '10px', fontWeight: 'bold', color: '#333' }}>1週間のCommit率</h3>
                 <div style={weeklyCommitStyle}>
@@ -109,20 +111,20 @@ function Dashboard() {
                         <div key={index} style={animatedStyle(index)} />
                     ))}
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-around', fontSize: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-around', fontSize: '14px', color: '#555' }}>
                     {dates.map((date, index) => (
-                        <div key={index} style={{ width: '50px', textAlign: 'center' }}>{date}</div>
+                        <div key={index} style={{ width: '60px', textAlign: 'center' }}>{date}</div>
                     ))}
                 </div>
             </div>
             <div style={{ flex: 1, textAlign: 'center' }}>
-                <h2 style={{ marginBottom: '20px' }}>最新リポジトリの使用言語率</h2>
-                <PieChart width={400} height={400}>
+                <h2 style={{ marginBottom: '20px', fontWeight: 'bold', color: '#333' }}>最新リポジトリの使用言語率</h2>
+                <PieChart width={500} height={500}>
                     <Pie
                         data={pieData}
                         cx="50%"
                         cy="50%"
-                        outerRadius={150}
+                        outerRadius={200}
                         fill="#8884d8"
                         dataKey="value"
                         label={false}
