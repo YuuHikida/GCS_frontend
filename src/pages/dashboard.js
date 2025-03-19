@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import LoadingScreen from '../components/LoadingScreen';
@@ -10,10 +10,15 @@ function Dashboard() {
     const navigate = useNavigate();
     const { githubData, fetchGitHubData, lastFetchTime } = useContext(GitHubDataContext);
 
-    // 現在の日付を取得 
+    // 現在の日付を取得
     const day = new Date();
     const convertDay = day.getFullYear() + '/' + ('0' + (day.getMonth() + 1)).slice(-2) + '/' + ('0' + day.getDate()).slice(-2) + ' ' +  ('0' + day.getHours()).slice(-2) + ':' + ('0' + day.getMinutes()).slice(-2) + ':' + ('0' + day.getSeconds()).slice(-2) + '.' + day.getMilliseconds();
-    // console.log("★convertDay", convertDay);
+
+   // lastFetchTimeから5分後の時刻を計算
+   const lastFetchTimeFromStorage = sessionStorage.getItem('lastFetchTime');
+   const nextUpdateTime = lastFetchTimeFromStorage ? new Date(new Date(lastFetchTimeFromStorage).getTime() + 5 * 60000) : null;
+   const nextUpdateTimeString = nextUpdateTime ? `${nextUpdateTime.getHours()}:${('0' + nextUpdateTime.getMinutes()).slice(-2)}` : 'N/A';
+
 
     useEffect(() => {
         if (!lastFetchTime || (new Date() - lastFetchTime) > 300000) { // 5分 = 300000ミリ秒
@@ -129,6 +134,9 @@ function Dashboard() {
                         <Legend verticalAlign="bottom" height={36} />
                     </PieChart>
                 </div>
+            </div>
+            <div style={{ marginTop: '20px', fontSize: '12px', color: '#777', textAlign: 'center' }}>
+                次の最新画面の更新は{nextUpdateTimeString}になります。
             </div>
         </div>
     );
