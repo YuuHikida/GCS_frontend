@@ -2,6 +2,7 @@ import './App.css';
 import React from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+import { GitHubDataProvider } from './context/GitHubDataContext';
 
 import Register from './pages/register';
 import Dashboard from './pages/dashboard';
@@ -42,46 +43,45 @@ const PrivateRoute = ({ children }) => {
  */
 function App() {
     return (
-        <Routes>
-            {/* 未認証でもアクセス可能なルート */}
-            <Route path="/" element={<Welcome />} />
+        <GitHubDataProvider>
+            <Routes>
+                {/* 未認証でもアクセス可能なルート */}
+                <Route path="/" element={<Welcome />} />
 
-            {/* === 以下、全て認証必須のルート === */}
-            <Route path="/register" element={
-                <PrivateRoute>
-                    <Header disableAuthButtons={true}>
-                        <Register />
-                    </Header>
-                </PrivateRoute>
-            } />
+                {/* === 以下、全て認証必須のルート === */}
+                <Route path="/register" element={
+                    <PrivateRoute>
+                        <Header disableAuthButtons={true}>
+                            <Register />
+                        </Header>
+                    </PrivateRoute>
+                } />
+                <Route path="/dashboard" element={
+                    <PrivateRoute>
+                        <Header>
+                            <Dashboard />
+                        </Header>
+                    </PrivateRoute>
+                } />
+                <Route path="/about" element={
+                    <PrivateRoute>
+                        <Header>
+                            <About />
+                        </Header>
+                    </PrivateRoute>
+                } />
+                <Route path="/profile" element={
+                    <PrivateRoute>
+                        <Header>
+                            <Profile />
+                        </Header>
+                    </PrivateRoute>
+                } />
 
-            <Route path="/dashboard" element={
-                <PrivateRoute>
-                    <Header>
-                        <Dashboard />
-                    </Header>
-                </PrivateRoute>
-            } />
-
-            <Route path="/about" element={
-                <PrivateRoute>
-                    <Header>
-                        <About />
-                    </Header>
-                </PrivateRoute>
-            } />
-
-            <Route path="/profile" element={
-                <PrivateRoute>
-                    <Header>
-                        <Profile />
-                    </Header>
-                </PrivateRoute>
-            } />
-
-            {/* 不明なパスは Welcome ページにリダイレクト */}
-            <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
+                {/* 不明なパスは Welcome ページにリダイレクト */}
+                <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+        </GitHubDataProvider>
     );
 }
 

@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import LoadingScreen from '../components/LoadingScreen';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import { GitHubDataContext } from '../context/GitHubDataContext';
 
 function Dashboard() {
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
     const navigate = useNavigate();
-    const [githubData, setGitHubData] = useState(null);
+    const { githubData, fetchGitHubData, lastFetchTime } = useContext(GitHubDataContext);
 
     // 現在の日付を取得 
     const day = new Date();
@@ -15,31 +16,10 @@ function Dashboard() {
     // console.log("★convertDay", convertDay);
 
     useEffect(() => {
-        const fetchGitHubData = async () => {
-            try {
-                const idToken = await user.getIdToken();
-                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/github/userDate?clientTimeStamp=${encodeURIComponent(convertDay)}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${idToken}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const data = await response.json();
-                // console.log('GitHub Data:', data);
-                setGitHubData(data);
-            } catch (error) {
-                console.error('Error fetching GitHub data:', error);
-            }
-        };
-
-        fetchGitHubData();
-    }, []);
+        if (!lastFetchTime || (new Date() - lastFetchTime) > 300000) { // 5分 = 300000ミリ秒
+            fetchGitHubData(user, convertDay);
+        }
+    }, [user, lastFetchTime, fetchGitHubData]);
 
     if (!githubData) {
         return <LoadingScreen />;
