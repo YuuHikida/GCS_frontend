@@ -12,7 +12,7 @@ function Dashboard() {
     // 現在の日付を取得 
     const day = new Date();
     const convertDay = day.getFullYear() + '/' + ('0' + (day.getMonth() + 1)).slice(-2) + '/' + ('0' + day.getDate()).slice(-2) + ' ' +  ('0' + day.getHours()).slice(-2) + ':' + ('0' + day.getMinutes()).slice(-2) + ':' + ('0' + day.getSeconds()).slice(-2) + '.' + day.getMilliseconds();
-    console.log("★convertDay", convertDay);
+    // console.log("★convertDay", convertDay);
 
     useEffect(() => {
         const fetchGitHubData = async () => {
@@ -31,7 +31,7 @@ function Dashboard() {
                 }
 
                 const data = await response.json();
-                console.log('GitHub Data:', data);
+                // console.log('GitHub Data:', data);
                 setGitHubData(data);
             } catch (error) {
                 console.error('Error fetching GitHub data:', error);

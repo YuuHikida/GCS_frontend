@@ -59,7 +59,7 @@ function Register() {
 
     //デバック
     React.useEffect(() => {
-        console.log('Current user:', user);
+        // console.log('Current user:', user);
     }, [user]);
 
     // useEffectを追加してuseGoogleEmailの変更を監視

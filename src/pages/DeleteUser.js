@@ -21,7 +21,7 @@ const DeleteUser = ({ user }) => {
                 });
 
                 const data = await response.json();
-                console.log("★data", data);
+                // console.log("★data", data);
                 if (data.success) {
                     toast.success("ユーザーが削除されました。");
                     setShowSuccessPopup(true);
