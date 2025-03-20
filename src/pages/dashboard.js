@@ -31,16 +31,26 @@ function Dashboard() {
 
     const { isCommitToday, languageUsage, weeklyCommitRate } = githubData;
 
+    /* 円グラフのデータを準備 */
+
     // 円グラフのデータを準備
-    const totalUsage = Object.values(languageUsage).reduce((acc, value) => acc + value, 0);
-    const pieData = Object.entries(languageUsage).map(([name, value]) => ({
+    const safeLanguageUsage = languageUsage || {};  // languageUsageがnullなら空オブジェクトにする
+
+    // totalUsageが0の場合の処理（ゼロ除算を防ぐ）
+    const totalUsage = Object.values(safeLanguageUsage).reduce((acc, value) => acc + value, 0);
+
+    // totalUsageが0の場合は空の配列を返す
+    const pieData = totalUsage > 0 
+    ? Object.entries(safeLanguageUsage).map(([name, value]) => ({
         name,
         value,
         percentage: ((value / totalUsage) * 100).toFixed(1) + '%'
-    }));
+    })) 
+    : []; // totalUsageが0の場合、空配列を設定
 
     // 円グラフの色
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+    /* 円グラフ要素ここまで*/
 
     // 今日の日付と曜日を取得
     const todayDate = `${day.getMonth() + 1}/${day.getDate()}(${['日', '月', '火', '水', '木', '金', '土'][day.getDay()]})`;
@@ -76,9 +86,13 @@ function Dashboard() {
                         <h2>{isCommitToday ? 'コミット済み(がんばったね！😊)' : 'コミット無し(今日はコミットしてみましょう！💪)'}</h2>
                     </div>
                     <div className="weekly-commit">
-                        {weeklyCommitRate.map((committed, index) => (
-                            <div key={index} style={animatedStyle(index)} />
-                        ))}
+                        {Array.isArray(weeklyCommitRate) && weeklyCommitRate.length > 0 ? (
+                            weeklyCommitRate.map((committed, index) => (
+                                <div key={index} style={animatedStyle(index)} />
+                            ))
+                        ) : (
+                            <p>No commit data available</p> // データがない場合はメッセージを表示
+                        )}
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-around', fontSize: '14px', color: '#555' }}>
                         {dates.map((date, index) => (
@@ -90,7 +104,7 @@ function Dashboard() {
                     <h2>最新リポジトリの使用言語率</h2>
                     <PieChart width={400} height={400}>
                         <Pie
-                            data={pieData}
+                            data={pieData} // safeDataが空配列でも安全
                             cx="50%"
                             cy="50%"
                             outerRadius={150}
@@ -98,7 +112,8 @@ function Dashboard() {
                             dataKey="value"
                             label={false}
                         >
-                            {pieData.map((entry, index) => (
+                            {/* pieDataが空でないときにのみmapを実行 */}
+                            {Array.isArray(pieData) && pieData.length > 0 && pieData.map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                             ))}
                         </Pie>
@@ -109,6 +124,8 @@ function Dashboard() {
             </div>
         </div>
     );
+    
+    
 }
 
 // CSS for animation
