@@ -102,12 +102,5 @@ form .chakra-button[type="submit"]:hover {
     color: inherit !important;
 }
 
-/* モバイル端末でナビバーを非表示 */
-@media (max-width: 768px) {
-    .header {
-        display: none !important;
-    }
-    .container {
-        margin-top: 10px !important; /* 上から10pxに設定 */
-    }
-}
+
+
