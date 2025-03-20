@@ -97,7 +97,7 @@ function Dashboard() {
                             今日のコミット <span style={{ display: 'block', marginTop: '5px' }}>{todayDate}</span>
                         </h2>
                         <div style={{ ...commitStatusStyle, marginTop: '-10px' }}>
-                            <h2>{isCommitToday ? 'あり(がんばったね！😊)' : 'なし(今日はコミットしてみましょう！💪)'}</h2>
+                            <h2>{isCommitToday ? 'コミット済み(がんばったね！😊)' : 'コミット無し(今日はコミットしてみましょう！💪)'}</h2>
                         </div>
                     </div>
                     <div>
