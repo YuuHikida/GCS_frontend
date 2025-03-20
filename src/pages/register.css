@@ -104,3 +104,12 @@ form .chakra-button[type="submit"]:hover {
 
 
 
+/* モバイル端末でナビバーを非表示 */
+@media (max-width: 768px) {
+    .header {
+        display: none !important;
+    }   
+    .container {
+        margin-top: 0px !important; /* 必要に応じて調整 */
+    }
+}
