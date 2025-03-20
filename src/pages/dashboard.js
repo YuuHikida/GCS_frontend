@@ -4,21 +4,20 @@ import { useNavigate } from 'react-router-dom';
 import LoadingScreen from '../components/LoadingScreen';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import { GitHubDataContext } from '../context/GitHubDataContext';
+import './dashboard.css';
 
 function Dashboard() {
     const { user } = useAuth();
-    const navigate = useNavigate();
     const { githubData, fetchGitHubData, lastFetchTime } = useContext(GitHubDataContext);
 
     // 現在の日付を取得
     const day = new Date();
     const convertDay = day.getFullYear() + '/' + ('0' + (day.getMonth() + 1)).slice(-2) + '/' + ('0' + day.getDate()).slice(-2) + ' ' +  ('0' + day.getHours()).slice(-2) + ':' + ('0' + day.getMinutes()).slice(-2) + ':' + ('0' + day.getSeconds()).slice(-2) + '.' + day.getMilliseconds();
 
-   // lastFetchTimeから5分後の時刻を計算
-   const lastFetchTimeFromStorage = sessionStorage.getItem('lastFetchTime');
-   const nextUpdateTime = lastFetchTimeFromStorage ? new Date(new Date(lastFetchTimeFromStorage).getTime() + 5 * 60000) : null;
-   const nextUpdateTimeString = nextUpdateTime ? `${nextUpdateTime.getHours()}:${('0' + nextUpdateTime.getMinutes()).slice(-2)}` : 'N/A';
-
+    // lastFetchTimeから5分後の時刻を計算
+    const lastFetchTimeFromStorage = sessionStorage.getItem('lastFetchTime');
+    const nextUpdateTime = lastFetchTimeFromStorage ? new Date(new Date(lastFetchTimeFromStorage).getTime() + 5 * 60000) : null;
+    const nextUpdateTimeString = nextUpdateTime ? `${nextUpdateTime.getHours()}:${('0' + nextUpdateTime.getMinutes()).slice(-2)}` : 'N/A';
 
     useEffect(() => {
         if (!lastFetchTime || (new Date() - lastFetchTime) > 300000) { // 5分 = 300000ミリ秒
@@ -43,25 +42,8 @@ function Dashboard() {
     // 円グラフの色
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
-    // 今日のコミットの有無を表示するスタイル
-    const commitStatusStyle = {
-        padding: '20px',
-        borderRadius: '10px',
-        backgroundColor: isCommitToday ? '#4CAF50' : '#F44336',
-        color: 'white',
-        textAlign: 'center',
-        marginBottom: '50px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-        marginTop: '-10px',
-    };
-
-    // 1週間のコミット履歴を表示するスタイル
-    const weeklyCommitStyle = {
-        display: 'flex',
-        justifyContent: 'space-around',
-        marginTop: '20px',
-        marginBottom: '20px',
-    };
+    // 今日の日付と曜日を取得
+    const todayDate = `${day.getMonth() + 1}/${day.getDate()}(${['日', '月', '火', '水', '木', '金', '土'][day.getDay()]})`;
 
     // アニメーション用のスタイル
     const animatedStyle = (index) => ({
@@ -84,38 +66,28 @@ function Dashboard() {
         return `${date.getMonth() + 1}/${date.getDate()}(${dayNames[date.getDay()]})`;
     });
 
-    // 今日の日付と曜日を取得
-    const todayDate = `${day.getMonth() + 1}/${day.getDate()}(${['日', '月', '火', '水', '木', '金', '土'][day.getDay()]})`;
-
     return (
-        <div className="dashboard-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px', backgroundColor: '#f0f0f0', borderRadius: '15px', boxShadow: '0 6px 18px rgba(0, 0, 0, 0.1)', maxWidth: '1000px', margin: 'auto' }}>
-            <h1 style={{ marginBottom: '30px', fontWeight: 'bold', color: '#333', fontSize: '36px' }}>Dashboard</h1>
-            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                <div style={{ flex: 1, marginRight: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <div>
-                        <h2 style={{ textAlign: 'center', marginBottom: '50px', fontWeight: 'bold', color: '#333' }}>
-                            今日のコミット <span style={{ display: 'block', marginTop: '5px' }}>{todayDate}</span>
-                        </h2>
-                        <div style={{ ...commitStatusStyle, marginTop: '-10px' }}>
-                            <h2>{isCommitToday ? 'コミット済み(がんばったね！😊)' : 'コミット無し(今日はコミットしてみましょう！💪)'}</h2>
-                        </div>
+        <div className="dashboard-container">
+            <h1>Dashboard</h1>
+            <div className="dashboard-content">
+                <div className="commit-status">
+                    <h2>今日のコミット <span>{todayDate}</span></h2>
+                    <div className="status">
+                        <h2>{isCommitToday ? 'コミット済み(がんばったね！😊)' : 'コミット無し(今日はコミットしてみましょう！💪)'}</h2>
                     </div>
-                    <div>
-                        <h3 style={{ textAlign: 'center', marginBottom: '10px', fontWeight: 'bold', color: '#333' }}>1週間のCommit率</h3>
-                        <div style={weeklyCommitStyle}>
-                            {weeklyCommitRate.map((committed, index) => (
-                                <div key={index} style={animatedStyle(index)} />
-                            ))}
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-around', fontSize: '14px', color: '#555' }}>
-                            {dates.map((date, index) => (
-                                <div key={index} style={{ width: '60px', textAlign: 'center' }}>{date}</div>
-                            ))}
-                        </div>
+                    <div className="weekly-commit">
+                        {weeklyCommitRate.map((committed, index) => (
+                            <div key={index} style={animatedStyle(index)} />
+                        ))}
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-around', fontSize: '14px', color: '#555' }}>
+                        {dates.map((date, index) => (
+                            <div key={index} style={{ width: '60px', textAlign: 'center' }}>{date}</div>
+                        ))}
                     </div>
                 </div>
-                <div style={{ flex: 1, textAlign: 'center' }}>
-                    <h2 style={{ marginBottom: '20px', fontWeight: 'bold', color: '#333' }}>最新リポジトリの使用言語率</h2>
+                <div className="language-usage">
+                    <h2>最新リポジトリの使用言語率</h2>
                     <PieChart width={400} height={400}>
                         <Pie
                             data={pieData}
@@ -135,9 +107,6 @@ function Dashboard() {
                     </PieChart>
                 </div>
             </div>
-            <div style={{ marginTop: '20px', fontSize: '12px', color: '#777', textAlign: 'center' }}>
-                次の最新画面の更新は{nextUpdateTimeString}になります。
-            </div>
         </div>
     );
 }
@@ -152,4 +121,4 @@ style.innerHTML = `
 `;
 document.head.appendChild(style);
 
-export default Dashboard; 
+export default Dashboard;
