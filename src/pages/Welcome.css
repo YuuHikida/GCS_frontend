@@ -1,4 +1,3 @@
-
 .hero-section {
     min-height: 100vh;
     background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
@@ -6,7 +5,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: 1rem;
     overflow: hidden;
 }
 
@@ -30,7 +29,7 @@
     margin: 0 auto;
     position: relative;
     z-index: 1;
-    padding: 0 2rem;
+    padding: 0 1rem;
 }
 
 .glass-card {
@@ -38,7 +37,8 @@
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 24px;
-    padding: 3rem;
+    padding: 1.5rem;
+    width: 100%;
     transform: translateY(0);
     transition: all 0.3s ease;
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.05),
@@ -52,38 +52,47 @@
 }
 
 .title {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+    width: 100%;
+    text-align: center;
 }
 
-.subtitle {
-    font-size: 1rem;
+.title-wrapper {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.main-title {
+    font-size: clamp(2rem, 8vw, 3rem);
+    color: #fff;
+}
+
+.subtitle-text {
+    font-size: clamp(0.8rem, 3vw, 1rem);
     color: #666;
-    display: block;
 }
 
 .description-container {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 16px;
-    padding: 2rem;
-    margin: 2rem 0;
+    padding: 1rem;
+    margin: 1rem 0;
     text-align: center;
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .hero-description {
     color: #e5e5e5;
-    font-size: 1.25rem;
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
+    font-size: clamp(0.9rem, 4vw, 1.25rem);
+    line-height: 1.6;
+    margin-bottom: 1rem;
 }
 
 .hero-sub-description {
     color: #a3a3a3;
-    font-size: 1.1rem;
+    font-size: clamp(0.8rem, 3.5vw, 1.1rem);
 }
 
 .login-button {
@@ -140,6 +149,71 @@
 
 .image-wrapper:hover img {
     transform: scale(1.02);
+}
+
+/* スマートフォン用のスタイル */
+@media (max-width: 480px) {
+    .hero-section {
+        padding: 0.5rem;
+    }
+
+    .glass-card {
+        padding: 1rem;
+    }
+
+    .description-container {
+        padding: 0.8rem;
+    }
+
+    .login-button {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    .title-wrapper {
+        flex-direction: column;
+        gap: 2px;
+    }
+    
+    .subtitle-text {
+        font-size: 0.85rem;
+    }
+    
+    /* 最初の subtitle-text（-GithubContributeSystem(GCS)）のスタイル */
+    .subtitle-text:first-of-type {
+        margin-top: -5px;
+    }
+}
+
+/* さらに小さい画面用 */
+@media (max-width: 320px) {
+    .glass-card {
+        padding: 0.8rem;
+    }
+
+    .description-container {
+        padding: 0.5rem;
+    }
+
+    .hero-description, 
+    .hero-sub-description {
+        line-height: 1.4;
+    }
+}
+
+/* 高さが小さい画面用 */
+@media (max-height: 600px) {
+    .hero-section {
+        padding: 0.5rem;
+    }
+
+    .glass-card {
+        padding: 1rem;
+    }
+
+    .description-container {
+        margin: 0.5rem 0;
+    }
 }
 
 @media (max-width: 768px) {

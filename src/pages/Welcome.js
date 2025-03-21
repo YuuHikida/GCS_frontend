@@ -72,8 +72,11 @@ function Welcome() {
                 <div className="hero-content">
                     <div className="glass-card">
                             <h1 className="title">
-                                <span>GCS</span>
-                                <span className="subtitle">~GithubContributeSystem(GCS)とは~</span>
+                                <div className="title-wrapper">
+                                    <span className="main-title">GCS</span>
+                                    <span className="subtitle-text">-GithubContributeSystem(GCS)</span>
+                                    <span className="subtitle-text">とは~</span>
+                                </div>
                             </h1>
                             <div className="description-container">
                                 <p className="hero-description">
