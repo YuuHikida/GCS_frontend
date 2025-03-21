@@ -20,7 +20,8 @@
 
 .dashboard-content {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
+    align-items: center;
     width: 100%;
 }
 
@@ -32,22 +33,22 @@
     justify-content: center;
 }
 
-.commit-status h2 {
+.status-text {
     text-align: center;
-    margin-bottom: 50px;
+    /* margin-bottom: 50px; */
     font-weight: bold;
     color: #333;
-}
-
-.commit-status .status {
-    padding: 20px;
-    border-radius: 10px;
+    /* 追加 */
+    
     background-color: #4CAF50;
     color: white;
+    border-radius: 10px;
     text-align: center;
-    margin-bottom: 50px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: -10px;
+}
+
+.status-title {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .weekly-commit {
@@ -67,14 +68,21 @@
 }
 
 .language-usage {
-    flex: 1;
+    /* flex: 1; */
     text-align: center;
+    align-items: center;
 }
 
 .language-usage h2 {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     font-weight: bold;
     color: #333;
+}
+
+.language-usage-title {
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
 }
 
 .update-info {
@@ -84,16 +92,21 @@
     text-align: center;
 }
 
+.commit-status{
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+}
 
 .commit-status .status {
     padding: 10px; /* パディングを減らす */
     border-radius: 10px;
-    background-color: #4CAF50;
+    /* background-color: #4CAF50;
     color: white;
-    text-align: center;
+    */
     margin-bottom: 30px; /* マージンを減らす */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: -5px; /* マージンを調整 */
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+    text-align: center;
 }
 
 

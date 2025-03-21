@@ -81,11 +81,14 @@ function Dashboard() {
             <h1>Dashboard</h1>
             <div className="dashboard-content">
                 <div className="commit-status">
-                    <h2>今日のコミット <span>{todayDate}</span></h2>
+                    
                     <div className="status">
-                        <h2>{isCommitToday ? 'コミット済み(がんばったね！😊)' : 'コミット無し(今日はコミットしてみましょう！💪)'}</h2>
+                        <div className="status-title"><h2>本日:<span>{todayDate}のコミット</span></h2 ></div>
+                        <div className="status-text">{isCommitToday ? 'コミット済み(がんばったね！😊)' : 'コミット無し(今日はコミットしてみましょう！💪)'}</div>
                     </div>
+                    <h2>今週のコミット</h2>
                     <div className="weekly-commit">
+                        
                         {Array.isArray(weeklyCommitRate) && weeklyCommitRate.length > 0 ? (
                             weeklyCommitRate.map((committed, index) => (
                                 <div key={index} style={animatedStyle(index)} />
@@ -94,6 +97,7 @@ function Dashboard() {
                             <p>No commit data available</p> // データがない場合はメッセージを表示
                         )}
                     </div>
+                    
                     <div style={{ display: 'flex', justifyContent: 'space-around', fontSize: '14px', color: '#555' }}>
                         {dates.map((date, index) => (
                             <div key={index} style={{ width: '60px', textAlign: 'center' }}>{date}</div>
@@ -101,7 +105,7 @@ function Dashboard() {
                     </div>
                 </div>
                 <div className="language-usage">
-                    <h2>最新リポジトリの使用言語率</h2>
+                   <div className="language-usage-title"> <h2>最新リポジトリの使用言語率</h2></div>
                     <PieChart width={400} height={400}>
                         <Pie
                             data={pieData} // safeDataが空配列でも安全
