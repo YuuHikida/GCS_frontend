@@ -39,7 +39,9 @@ function Header({ children }) {
     const handleLogout = async () => {
         try {
             // セッションストレージをクリア
-            sessionStorage.clear();
+            sessionStorage.removeItem("githubData");
+            sessionStorage.removeItem("lastFetchTime");
+            sessionStorage.removeItem("authToken");
             await logout();
             navigate('/');
         } catch (error) {
