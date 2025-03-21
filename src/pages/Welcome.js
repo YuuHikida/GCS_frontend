@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import LoadingScreen from '../components/LoadingScreen';
 import './Welcome.css'; // CSSファイルをインポート
 
 function Welcome() {
     const { loginWithGoogle } = useAuth();
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
 
     // 小さい画面(レスポンシブ対応での余白を打ち消す
     useEffect(() => {
@@ -30,6 +32,7 @@ function Welcome() {
 
     const handleLogin = async () => {
         try {
+            setIsLoading(true);
             const result = await loginWithGoogle();
             const idToken = await result.getIdToken();
             
@@ -45,10 +48,8 @@ function Welcome() {
             
             if (data.success) {
                 if (data.needsRegistration) {
-                    // stateオプションを使用して、temporaryTokenという名前でidTokenを/registerページに渡す
                     navigate('/register', { state: { temporaryToken: idToken } });
                 } else {
-                    // 既存ユーザーの場合のみトークンを保存
                     sessionStorage.setItem('authToken', idToken);
                     navigate('/dashboard');
                 }
@@ -57,8 +58,14 @@ function Welcome() {
             }
         } catch (error) {
             console.error("ログインエラー:", error);
+        } finally {
+            setIsLoading(false);
         }
     };
+
+    if (isLoading) {
+        return <LoadingScreen />;
+    }
 
     return (
             <div className="hero-section">
