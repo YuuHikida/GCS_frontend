@@ -44,12 +44,15 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
+            // Firebase認証のサインアウト
             await auth.signOut();
-            // すべてのセッションストレージをクリア
+            // セッションストレージを完全にクリア
             sessionStorage.clear();
+            // ユーザー状態をリセット
             setUser(null);
         } catch (error) {
             console.error("Logout error:", error);
+            throw error;
         }
     };
 

@@ -38,6 +38,8 @@ function Header({ children }) {
 
     const handleLogout = async () => {
         try {
+            // セッションストレージをクリア
+            sessionStorage.clear();
             await logout();
             navigate('/');
         } catch (error) {
