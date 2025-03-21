@@ -45,6 +45,8 @@ export const AuthProvider = ({ children }) => {
     const logout = async () => {
         try {
             await auth.signOut();
+            // すべてのセッションストレージをクリア
+            sessionStorage.clear();
             setUser(null);
         } catch (error) {
             console.error("Logout error:", error);
