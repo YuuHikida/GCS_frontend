@@ -78,36 +78,38 @@ function Header({ children }) {
 
     return (
         <>
-            <div className="header">
-                {[
-                    { icon: <FaHome />, label: 'ホーム', path: '/dashboard' },
-                    { icon: <FaInfoCircle />, label: 'サイトについて', path: '/about' },
-                    { icon: <FaUser />, label: 'ユーザー情報編集', path: '/profile' },
-                    { icon: <FaTrophy />, label: 'ランキング', path: '/ranking' },
-                    { icon: <FaSignOutAlt />, label: 'サインアウト', path: '/' }
-                ].map((item, index) => (
-                    <a
-                        key={index}
-                        href={item.path}
-                        className={`nav-item ${activeIndex === index ? 'active' : ''} ${
-                            isRegisterPage ? 'disabled' : ''
-                        }`}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            if (!isRegisterPage) {
-                                handleClick(index);
-                            }
-                        }}
-                        style={{
-                            pointerEvents: isRegisterPage ? 'none' : 'auto',
-                            opacity: isRegisterPage ? 0.5 : 1
-                        }}
-                    >
-                        {item.icon}
-                        <span className="nav-label">{item.label}</span>
-                    </a>
-                ))}
-            </div>
+            <header className={`header ${isRegisterPage ? 'header-register' : ''}`}>
+                <div className="header">
+                    {[
+                        { icon: <FaHome />, label: 'ホーム', path: '/dashboard' },
+                        { icon: <FaInfoCircle />, label: 'サイトについて', path: '/about' },
+                        { icon: <FaUser />, label: 'ユーザー情報編集', path: '/profile' },
+                        { icon: <FaTrophy />, label: 'ランキング', path: '/ranking' },
+                        { icon: <FaSignOutAlt />, label: 'サインアウト', path: '/' }
+                    ].map((item, index) => (
+                        <a
+                            key={index}
+                            href={item.path}
+                            className={`nav-item ${activeIndex === index ? 'active' : ''} ${
+                                isRegisterPage ? 'disabled' : ''
+                            }`}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                if (!isRegisterPage) {
+                                    handleClick(index);
+                                }
+                            }}
+                            style={{
+                                pointerEvents: isRegisterPage ? 'none' : 'auto',
+                                opacity: isRegisterPage ? 0.5 : 1
+                            }}
+                        >
+                            {item.icon}
+                            <span className="nav-label">{item.label}</span>
+                        </a>
+                    ))}
+                </div>
+            </header>
             <div style={{ marginTop: '70px' }}>
                 {children}
             </div>

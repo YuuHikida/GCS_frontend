@@ -102,15 +102,21 @@ form .chakra-button[type="submit"]:hover {
     color: inherit !important;
 }
 
-
-
 /*モバイル端末でナビバーを非表示 */
 @media (max-width: 768px) {
-    /* .header {
+    /* より具体的なセレクタを使用して優先度を上げる */
+    body .register-page .header,
+    .register-page > .header {
         display: none !important;
-    }    */
-    .container {
-        margin-top: 0px !important; /* 必要に応じて調整 */
+    }
+    
+    /* グローバルスタイルの padding-top を打ち消す */
+    body.register-page-active {
+        padding-top: 0 !important;
+    }
+    
+    .register-page .container {
+        margin-top: 0px !important;
     }
 }
 

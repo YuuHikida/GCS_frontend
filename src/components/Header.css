@@ -65,3 +65,9 @@
 .nav-item.disabled:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
+
+@media (max-width: 768px) {
+    .header-register {
+        display: none !important;
+    }
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, Input, Stack, Box, HStack, VStack, Text, FormControl, FormLabel, FormHelperText, Heading } from "@chakra-ui/react";
@@ -71,6 +71,16 @@ function Register() {
             }));
         }
     }, [selectedEmailOption, user]);
+
+    useEffect(() => {
+        // registerページに来たときにbodyにクラスを追加
+        document.body.classList.add('register-page-active');
+        
+        // コンポーネントのアンマウント時にクラスを削除
+        return () => {
+            document.body.classList.remove('register-page-active');
+        };
+    }, []);
 
     const registerUser = async (userData) => {
         try {
@@ -172,180 +182,182 @@ function Register() {
 
     // <ToastContainer />このコンポーネントがポップアップ表示管理
     return (
-        <Box className="container">
-            <LoginRedirect user={user} />
-            <form onSubmit={handleSubmit}>
-                <Box borderWidth="1px" borderRadius="lg" p={6}>
-                    <Stack spacing={4}>
-                        <Heading size="lg">ユーザー登録</Heading>
-                        <Text color="gray.600">
-                            以下に必要な情報を入力してください。
-                        </Text>
-                    </Stack>
+        <div className="register-page">
+            <Box className="container">
+                <LoginRedirect user={user} />
+                <form onSubmit={handleSubmit}>
+                    <Box borderWidth="1px" borderRadius="lg" p={6}>
+                        <Stack spacing={4}>
+                            <Heading size="lg">ユーザー登録</Heading>
+                            <Text color="gray.600">
+                                以下に必要な情報を入力してください。
+                            </Text>
+                        </Stack>
 
-                    <Box mt={6}>
-                        <VStack spacing={6} align="stretch">
-                            <FormControl>
-                                <FormLabel>通知用メールアドレスの選択</FormLabel>
-                                <VStack align="stretch" spacing={4}>
-                                    <HStack spacing={3} align="stretch">
-                                        <Box 
-                                            p={3} 
-                                            border="1px solid" 
-                                            borderColor={selectedEmailOption === 'google' ? "blue.500" : "gray.200"}
-                                            borderRadius="md"
-                                            cursor="pointer"
-                                            onClick={() => handleEmailOptionChange('google')}
-                                            bg={selectedEmailOption === 'google' ? "blue.50" : "white"}
-                                            flex="1"
-                                            maxW="50%"
-                                            transition="all 0.2s"
-                                            _hover={{
-                                                borderColor: "blue.500",
-                                                bg: "blue.50"
-                                            }}
-                                        >
-                                            <Text fontWeight="bold" fontSize="sm">
-                                                Googleに登録されたメールアドレスを使用
-                                            </Text>
-                                            <Text color="gray.600" fontSize="sm" mt={1}>
-                                                {user?.email}
-                                            </Text>
-                                        </Box>
-                                        <Box 
-                                            p={3}
-                                            border="1px solid" 
-                                            borderColor={selectedEmailOption === 'custom' ? "blue.500" : "gray.200"}
-                                            borderRadius="md"
-                                            cursor="pointer"
-                                            onClick={() => handleEmailOptionChange('custom')}
-                                            bg={selectedEmailOption === 'custom' ? "blue.50" : "white"}
-                                            flex="1"
-                                            maxW="50%"
-                                            transition="all 0.2s"
-                                            _hover={{
-                                                borderColor: "blue.500",
-                                                bg: "blue.50"
-                                            }}
-                                        >
-                                            <Text fontWeight="bold" fontSize="sm">
-                                                自分で入力
-                                            </Text>
-                                            <Text color="gray.600" fontSize="sm" mt={1}>
-                                                別のメールアドレスを使用
-                                            </Text>
-                                        </Box>
-                                    </HStack>
-                                    {selectedEmailOption === 'custom' && (
-                                        <Input
-                                            mt={2}
-                                            type="email"
-                                            value={formData.notificationEmail}
-                                            onChange={(e) => setFormData({...formData, notificationEmail: e.target.value})}
-                                            placeholder="me@example.com"
-                                            width="100%"
-                                            fontSize="sm"
-                                            borderColor="gray.300"
-                                        />
-                                    )}
-                                </VStack>
-                            </FormControl>
-
-                            <FormControl>
-                                <FormLabel>Gitユーザー名</FormLabel>
-                                <VStack align="stretch" spacing={2}>
-                                    <Input
-                                        type="text"
-                                        value={formData.gitName}
-                                        onChange={(e) => setFormData({...formData, gitName: e.target.value})}
-                                        required
-                                        className="chakra-input"
-                                    />
-                                    <AccordionRoot allowToggle>
-                                        <AccordionItem>
-                                            <AccordionItemTrigger>
-                                                <Text
-                                                    display="block !important"
-                                                    visibility="visible !important"
-                                                    position="relative"
-                                                    zIndex="1"
-                                                    color="black !important"
-                                                    fontSize="md"
-                                                    fontWeight="normal"
-                                                >
-                                                    Gitユーザー名とは？
+                        <Box mt={6}>
+                            <VStack spacing={6} align="stretch">
+                                <FormControl>
+                                    <FormLabel>通知用メールアドレスの選択</FormLabel>
+                                    <VStack align="stretch" spacing={4}>
+                                        <HStack spacing={3} align="stretch">
+                                            <Box 
+                                                p={3} 
+                                                border="1px solid" 
+                                                borderColor={selectedEmailOption === 'google' ? "blue.500" : "gray.200"}
+                                                borderRadius="md"
+                                                cursor="pointer"
+                                                onClick={() => handleEmailOptionChange('google')}
+                                                bg={selectedEmailOption === 'google' ? "blue.50" : "white"}
+                                                flex="1"
+                                                maxW="50%"
+                                                transition="all 0.2s"
+                                                _hover={{
+                                                    borderColor: "blue.500",
+                                                    bg: "blue.50"
+                                                }}
+                                            >
+                                                <Text fontWeight="bold" fontSize="sm">
+                                                    Googleに登録されたメールアドレスを使用
                                                 </Text>
-                                            </AccordionItemTrigger>
-                                            <AccordionItemContent>
-                                                <VStack align="start" spacing={2}>
-                                                    <Text>
-                                                        自分のGitHubのプロフィールURLの末尾の文字列です。
+                                                <Text color="gray.600" fontSize="sm" mt={1}>
+                                                    {user?.email}
+                                                </Text>
+                                            </Box>
+                                            <Box 
+                                                p={3}
+                                                border="1px solid" 
+                                                borderColor={selectedEmailOption === 'custom' ? "blue.500" : "gray.200"}
+                                                borderRadius="md"
+                                                cursor="pointer"
+                                                onClick={() => handleEmailOptionChange('custom')}
+                                                bg={selectedEmailOption === 'custom' ? "blue.50" : "white"}
+                                                flex="1"
+                                                maxW="50%"
+                                                transition="all 0.2s"
+                                                _hover={{
+                                                    borderColor: "blue.500",
+                                                    bg: "blue.50"
+                                                }}
+                                            >
+                                                <Text fontWeight="bold" fontSize="sm">
+                                                    自分で入力
+                                                </Text>
+                                                <Text color="gray.600" fontSize="sm" mt={1}>
+                                                    別のメールアドレスを使用
+                                                </Text>
+                                            </Box>
+                                        </HStack>
+                                        {selectedEmailOption === 'custom' && (
+                                            <Input
+                                                mt={2}
+                                                type="email"
+                                                value={formData.notificationEmail}
+                                                onChange={(e) => setFormData({...formData, notificationEmail: e.target.value})}
+                                                placeholder="me@example.com"
+                                                width="100%"
+                                                fontSize="sm"
+                                                borderColor="gray.300"
+                                            />
+                                        )}
+                                    </VStack>
+                                </FormControl>
+
+                                <FormControl>
+                                    <FormLabel>Gitユーザー名</FormLabel>
+                                    <VStack align="stretch" spacing={2}>
+                                        <Input
+                                            type="text"
+                                            value={formData.gitName}
+                                            onChange={(e) => setFormData({...formData, gitName: e.target.value})}
+                                            required
+                                            className="chakra-input"
+                                        />
+                                        <AccordionRoot allowToggle>
+                                            <AccordionItem>
+                                                <AccordionItemTrigger>
+                                                    <Text
+                                                        display="block !important"
+                                                        visibility="visible !important"
+                                                        position="relative"
+                                                        zIndex="1"
+                                                        color="black !important"
+                                                        fontSize="md"
+                                                        fontWeight="normal"
+                                                    >
+                                                        Gitユーザー名とは？
                                                     </Text>
-                                                    <Box p={2} bg="gray.50" borderRadius="md">
+                                                </AccordionItemTrigger>
+                                                <AccordionItemContent>
+                                                    <VStack align="start" spacing={2}>
                                                         <Text>
-                                                            例：https://github.com/<Text as="span" fontWeight="bold" color="blue.500">TanakaTaro</Text>
+                                                            自分のGitHubのプロフィールURLの末尾の文字列です。
                                                         </Text>
-                                                        <Text fontSize="sm" color="gray.600" mt={1}>
-                                                            この場合、ユーザー名は「TanakaTaro」となります
-                                                        </Text>
-                                                    </Box>
-                                                </VStack>
-                                            </AccordionItemContent>
-                                        </AccordionItem>
-                                    </AccordionRoot>
-                                </VStack>
-                            </FormControl>
+                                                        <Box p={2} bg="gray.50" borderRadius="md">
+                                                            <Text>
+                                                                例：https://github.com/<Text as="span" fontWeight="bold" color="blue.500">TanakaTaro</Text>
+                                                            </Text>
+                                                            <Text fontSize="sm" color="gray.600" mt={1}>
+                                                                この場合、ユーザー名は「TanakaTaro」となります
+                                                            </Text>
+                                                        </Box>
+                                                    </VStack>
+                                                </AccordionItemContent>
+                                            </AccordionItem>
+                                        </AccordionRoot>
+                                    </VStack>
+                                </FormControl>
 
-                            <FormControl>
-                                <FormLabel>通知時間</FormLabel>
-                                <Stack direction={{ base: "column", md: "row" }} alignItems="center" spacing={2}>
-                                    <NativeSelectRoot>
-                                        <NativeSelectField
-                                            name="hour"
-                                            items={Array.from({ length: 24 }, (_, hour) => String(hour).padStart(2, '0'))}
-                                            value={formData.time.split(':')[0]}
-                                            onChange={handleHourChange}
-                                            backgroundColor="gray.100"
-                                            borderColor="gray.300"
-                                            width="100%"
-                                        />
-                                    </NativeSelectRoot>
-                                    <span>:</span>
-                                    <NativeSelectRoot>
-                                        <NativeSelectField
-                                            name="minute"
-                                            items={['00', '15', '30', '45']}
-                                            value={formData.time.split(':')[1]}
-                                            onChange={handleMinuteChange}
-                                            backgroundColor="gray.100"
-                                            borderColor="gray.300"
-                                            width="100%"
-                                        />
-                                    </NativeSelectRoot>
-                                </Stack>
-                            </FormControl>
-                        </VStack>
+                                <FormControl>
+                                    <FormLabel>通知時間</FormLabel>
+                                    <Stack direction={{ base: "column", md: "row" }} alignItems="center" spacing={2}>
+                                        <NativeSelectRoot>
+                                            <NativeSelectField
+                                                name="hour"
+                                                items={Array.from({ length: 24 }, (_, hour) => String(hour).padStart(2, '0'))}
+                                                value={formData.time.split(':')[0]}
+                                                onChange={handleHourChange}
+                                                backgroundColor="gray.100"
+                                                borderColor="gray.300"
+                                                width="100%"
+                                            />
+                                        </NativeSelectRoot>
+                                        <span>:</span>
+                                        <NativeSelectRoot>
+                                            <NativeSelectField
+                                                name="minute"
+                                                items={['00', '15', '30', '45']}
+                                                value={formData.time.split(':')[1]}
+                                                onChange={handleMinuteChange}
+                                                backgroundColor="gray.100"
+                                                borderColor="gray.300"
+                                                width="100%"
+                                            />
+                                        </NativeSelectRoot>
+                                    </Stack>
+                                </FormControl>
+                            </VStack>
+                        </Box>
+
+                        <Button 
+                            type="submit" 
+                            className="chakra-button"
+                            mt={6}
+                        >
+                            登録
+                        </Button>
                     </Box>
-
-                    <Button 
-                        type="submit" 
-                        className="chakra-button"
-                        mt={6}
-                    >
-                        登録
-                    </Button>
-                </Box>
-            </form>
-            
-            <DisplayPopup
-                isOpen={showSuccessPopup}
-                onClose={handlePopupClose}
-                message="登録が完了しました"
-                redirectPath="/dashboard"
-            />
-            
-            <ToastContainer />
-        </Box>
+                </form>
+                
+                <DisplayPopup
+                    isOpen={showSuccessPopup}
+                    onClose={handlePopupClose}
+                    message="登録が完了しました"
+                    redirectPath="/dashboard"
+                />
+                
+                <ToastContainer />
+            </Box>
+        </div>
     );
 }
 
