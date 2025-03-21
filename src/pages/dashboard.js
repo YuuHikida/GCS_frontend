@@ -98,10 +98,12 @@ function Dashboard() {
                         )}
                     </div>
                     
-                    <div style={{ display: 'flex', justifyContent: 'space-around', fontSize: '14px', color: '#555' }}>
+                    <div  style={{ display: 'flex', justifyContent: 'space-around', fontSize: '14px', color: '#555' }}>
+      
                         {dates.map((date, index) => (
                             <div key={index} style={{ width: '60px', textAlign: 'center' }}>{date}</div>
                         ))}
+                    
                     </div>
                 </div>
                 <div className="language-usage">

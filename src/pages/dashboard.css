@@ -113,26 +113,77 @@
 
 /* スマートフォン用のスタイル */
 @media (max-width: 768px) {
+    .dashboard-container {
+        padding: 20px 10px; /* 左右のパディングを減らす */
+        margin: 10px;      /* 余白を調整 */
+        width: calc(100% - 20px); /* 画面幅から余白を引いた幅に設定 */
+        max-width: 100%;   /* 最大幅を画面幅に合わせる */
+    }
+
     .dashboard-content {
         flex-direction: column;
         align-items: center;
+        width: 100%;
     }
 
-    .commit-status, .language-usage {
+    .commit-status {
         margin-right: 0;
         margin-bottom: 20px;
+        width: 100%;      /* 幅を100%に */
+        padding: 0 5px;   /* 左右のパディングを追加 */
     }
 
-    .commit-status h2, .language-usage h2 {
-        font-size: 24px;
+    .status-text {
+        width: 95%;       /* 幅を95%に制限 */
+        margin: 0 auto;   /* 中央揃え */
+    }
+
+    .weekly-commit {
+        width: 100%;
+        justify-content: center; /* 中央揃え */
+        gap: 5px;        /* 要素間の間隔を調整 */
     }
 
     .weekly-commit div {
-        width: 30px;
-        height: 30px;
+        width: 25px;     /* サイズを小さく */
+        height: 25px;
+    }
+
+    /* 日付表示の調整 */
+    .commit-status div[style*="display: flex"] {
+        width: 100%;
+        justify-content: center;
+        font-size: 12px;  /* フォントサイズを小さく */
+    }
+
+    .commit-status div[style*="display: flex"] div {
+        width: 45px;     /* 日付の幅を調整 */
     }
 
     .language-usage {
-        order: 2; /* 1週間のコミット率の下に移動 */
+        order: 2;
+        width: 100%;     /* 幅を100%に */
+    }
+
+    /* 円グラフのサイズ調整 */
+    .recharts-wrapper {
+        width: 100% !important;
+        height: auto !important;
+    }
+}
+
+/* さらに小さい画面用（iPhone SE等） */
+@media (max-width: 400px) {
+    .dashboard-container {
+        padding: 10px 5px;
+    }
+
+    .commit-status h2, .language-usage h2 {
+        font-size: 20px;
+    }
+
+    .weekly-commit div {
+        width: 20px;
+        height: 20px;
     }
 }
