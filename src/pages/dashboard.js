@@ -115,6 +115,8 @@ function Dashboard() {
                             fill="#8884d8"
                             dataKey="value"
                             label={false}
+                            startAngle={90}
+                            endAngle={-270}
                         >
                             {/* pieDataが空でないときにのみmapを実行 */}
                             {Array.isArray(pieData) && pieData.length > 0 && pieData.map((entry, index) => (

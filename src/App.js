@@ -10,7 +10,7 @@ import Header from './components/Header';
 import Welcome from './pages/Welcome';
 import About from './pages/About';
 import Profile from './pages/Profile';
-import Demo from './pages/test';
+
 
 /**
  * 認証が必要なルートを保護するコンポーネント
