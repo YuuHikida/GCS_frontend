@@ -1,14 +1,16 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import LoadingScreen from '../components/LoadingScreen';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import { GitHubDataContext } from '../context/GitHubDataContext';
+import NoDataDashboard from '../components/NoDataDashboard';
 import './dashboard.css';
 
 function Dashboard() {
     const { user } = useAuth();
     const { githubData, fetchGitHubData, lastFetchTime } = useContext(GitHubDataContext);
+    const [hasError, setHasError] = useState(false);
 
     // 現在の日付を取得
     const day = new Date();
@@ -20,10 +22,27 @@ function Dashboard() {
     const nextUpdateTimeString = nextUpdateTime ? `${nextUpdateTime.getHours()}:${('0' + nextUpdateTime.getMinutes()).slice(-2)}` : 'N/A';
 
     useEffect(() => {
-        if (!lastFetchTime || (new Date() - lastFetchTime) > 300000) { // 5分 = 300000ミリ秒
-            fetchGitHubData(user, convertDay);
-        }
-    }, [user, lastFetchTime, fetchGitHubData]);
+        const fetchData = async () => {
+            if (!lastFetchTime || (new Date() - lastFetchTime) > 300000) {
+                try {
+                    const result = await fetchGitHubData(user, convertDay);
+                    if (result.error) {
+                        setHasError(true);
+                        return;
+                    }
+                    setHasError(false);
+                } catch (error) {
+                    console.error('Error:', error);
+                    setHasError(true);
+                }
+            }
+        };
+        fetchData();
+    }, [user, lastFetchTime, fetchGitHubData, convertDay]);
+
+    if (hasError) {
+        return <NoDataDashboard />;
+    }
 
     if (!githubData) {
         return <LoadingScreen />;

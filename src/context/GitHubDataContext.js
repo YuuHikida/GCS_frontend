@@ -25,18 +25,21 @@ export const GitHubDataProvider = ({ children }) => {
                 }
             });
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+            const data = await response.json();
+            
+            if (!data.success && data.error === "レポジトリがありません。最低1つでもレポジトリを作成して当サイトを利用してください") {
+                return { error: true, message: data.error };
             }
 
-            const data = await response.json();
             setGitHubData(data);
             const currentTime = new Date();
             setLastFetchTime(currentTime);
             sessionStorage.setItem('githubData', JSON.stringify(data));
             sessionStorage.setItem('lastFetchTime', currentTime.toISOString());
+            return { error: false, data };
         } catch (error) {
             console.error('Error fetching GitHub data:', error);
+            return { error: true, message: error.message };
         }
     };
 
