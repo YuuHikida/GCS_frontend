@@ -217,7 +217,12 @@
 }
 
 @media (max-width: 768px) {
+    /* .welcome-page クラスがある場合のみナビバーを非表示にする */
+    .welcome-page .header {
+        display: none !important;
+    }
+    
     .welcome-page {
-        padding-top: 0 !important; /* Welcomeページでの余白を打ち消す */
+        padding-top: 0 !important;
     }
 }
