@@ -109,7 +109,22 @@
     text-align: center;
 }
 
+.date-container {
+    display: flex;
+    justify-content: space-around;
+    font-size: 14px;
+    color: #555;
+    width: 100%;
+    overflow-x: auto; /* スクロールが必要な場合のみスクロール可能に */
+    padding: 0 5px;
+}
 
+.date-item {
+    min-width: 50px; /* 最小幅を設定 */
+    text-align: center;
+    padding: 0 2px;
+    white-space: nowrap; /* 日付を折り返さない */
+}
 
 /* スマートフォン用のスタイル */
 @media (max-width: 768px) {
@@ -185,5 +200,13 @@
     .weekly-commit div {
         width: 20px;
         height: 20px;
+    }
+
+    .date-container {
+        font-size: 12px; /* フォントサイズを小さく */
+    }
+    
+    .date-item {
+        min-width: 40px; /* さらに幅を小さく */
     }
 }
