@@ -120,4 +120,24 @@ form .chakra-button[type="submit"]:hover {
     }
 }
 
+/* 通知時間のセレクトボックスのスタイル */
+.notification-time-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* セレクトボックスの幅を固定 */
+.notification-time-container select {
+    width: 80px !important;
+    min-width: 80px !important;
+}
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+    .notification-time-container {
+        justify-content: center;
+    }
+}
+
 

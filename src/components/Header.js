@@ -72,7 +72,7 @@ function Header({ children }) {
                 alert('ランキング機能は現在準備中です！');
                 return;
             case 4:
-                console.log("ログアウト処理呼び出し");
+                // console.log("ログアウト処理呼び出し");
                 handleLogout();
                 return;
             default:

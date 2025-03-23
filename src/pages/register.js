@@ -309,8 +309,8 @@ function Register() {
 
                                 <FormControl>
                                     <FormLabel>通知時間</FormLabel>
-                                    <Stack direction={{ base: "column", md: "row" }} alignItems="center" spacing={2}>
-                                        <NativeSelectRoot>
+                                    <HStack spacing={2} align="center" width="100%">
+                                        <NativeSelectRoot style={{ width: '80px' }}>
                                             <NativeSelectField
                                                 name="hour"
                                                 items={Array.from({ length: 24 }, (_, hour) => String(hour).padStart(2, '0'))}
@@ -318,11 +318,10 @@ function Register() {
                                                 onChange={handleHourChange}
                                                 backgroundColor="gray.100"
                                                 borderColor="gray.300"
-                                                width="100%"
                                             />
                                         </NativeSelectRoot>
-                                        <span>:</span>
-                                        <NativeSelectRoot>
+                                        <Text>:</Text>
+                                        <NativeSelectRoot style={{ width: '80px' }}>
                                             <NativeSelectField
                                                 name="minute"
                                                 items={['00', '15', '30', '45']}
@@ -330,10 +329,9 @@ function Register() {
                                                 onChange={handleMinuteChange}
                                                 backgroundColor="gray.100"
                                                 borderColor="gray.300"
-                                                width="100%"
                                             />
                                         </NativeSelectRoot>
-                                    </Stack>
+                                    </HStack>
                                 </FormControl>
                             </VStack>
                         </Box>
